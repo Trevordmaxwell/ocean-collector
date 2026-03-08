@@ -69,8 +69,10 @@ export function AddSeaGlassScreen({ navigation }: RootScreenProps<"AddSeaGlass">
           ))}
         </View>
 
-        <Text style={styles.label}>Shape details</Text>
-        <Text style={styles.helper}>Main shape</Text>
+        <Text style={styles.label}>Shape</Text>
+        <Text style={styles.helper}>
+          Pick the main shape, then whether the piece feels flat or curved.
+        </Text>
         <View style={styles.choiceWrap}>
           {shapes.map((entry) => (
             <Chip
@@ -82,8 +84,7 @@ export function AddSeaGlassScreen({ navigation }: RootScreenProps<"AddSeaGlass">
           ))}
         </View>
 
-        <Text style={styles.helper}>Flat or curved</Text>
-        <View style={styles.choiceWrap}>
+        <View style={[styles.choiceWrap, styles.surfaceChoiceWrap]}>
           {surfaces.map((entry) => (
             <Chip
               key={entry}
@@ -175,6 +176,9 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     flexWrap: "wrap",
     gap: spacing.xs,
+  },
+  surfaceChoiceWrap: {
+    marginTop: spacing.xs,
   },
   colorChip: {
     borderRadius: radius.pill,

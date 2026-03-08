@@ -1,8 +1,7 @@
-import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { NavigationContainer, DefaultTheme } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { Pressable, Platform } from "react-native";
+import { Pressable, Platform, StyleSheet, Text, View } from "react-native";
 
 import { CollectionItemScreen } from "../screens/CollectionItemScreen";
 import { CollectionScreen } from "../screens/CollectionScreen";
@@ -22,6 +21,12 @@ import type { MainTabParamList, RootStackParamList } from "./types";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 const Tabs = createBottomTabNavigator<MainTabParamList>();
+const tabIcons: Record<keyof MainTabParamList, string> = {
+  Home: "🏠",
+  Collection: "🐚",
+  Rewards: "⭐",
+  Settings: "⚙️",
+};
 
 function MainTabs() {
   return (
@@ -33,13 +38,17 @@ function MainTabs() {
         tabBarStyle:
           Platform.OS === "web"
             ? {
-                height: 104,
+                position: "relative",
+                height: 92,
                 marginHorizontal: spacing.md,
                 marginBottom: spacing.md,
-                paddingBottom: spacing.sm,
+                paddingHorizontal: spacing.xs,
+                paddingBottom: spacing.xs,
                 paddingTop: spacing.xs,
                 borderRadius: radius.lg,
-                backgroundColor: "rgba(255,255,255,0.98)",
+                backgroundColor: "rgba(255, 253, 248, 0.98)",
+                borderWidth: 1,
+                borderColor: "rgba(143, 201, 232, 0.28)",
                 borderTopWidth: 0,
                 ...shadows.card,
               }
@@ -49,20 +58,25 @@ function MainTabs() {
                 right: spacing.md,
                 bottom: spacing.sm,
                 height: 92,
+                paddingHorizontal: spacing.xs,
                 paddingBottom: spacing.sm,
                 paddingTop: spacing.xs,
                 borderRadius: radius.lg,
-                backgroundColor: "rgba(255,255,255,0.96)",
+                backgroundColor: "rgba(255, 253, 248, 0.96)",
+                borderWidth: 1,
+                borderColor: "rgba(143, 201, 232, 0.24)",
                 borderTopWidth: 0,
                 ...shadows.card,
               },
         tabBarItemStyle: {
-          paddingVertical: spacing.xs,
+          paddingVertical: spacing.xxs,
+          marginHorizontal: spacing.xxs,
+          borderRadius: radius.md,
         },
         tabBarLabelStyle: {
           fontFamily: "Nunito_700Bold",
-          fontSize: 13,
-          marginTop: 2,
+          fontSize: 12,
+          marginTop: 0,
         },
         tabBarButton: ({ children, onPress, onLongPress, style, accessibilityState }) => (
           <Pressable
@@ -75,20 +89,11 @@ function MainTabs() {
             {children}
           </Pressable>
         ),
-        tabBarIcon: ({ color, size }) => {
-          switch (route.name) {
-            case "Home":
-              return <Ionicons name="home" size={size} color={color} />;
-            case "Collection":
-              return <Ionicons name="albums" size={size} color={color} />;
-            case "Rewards":
-              return (
-                <MaterialCommunityIcons name="star-four-points" size={size} color={color} />
-              );
-            case "Settings":
-              return <Ionicons name="settings" size={size} color={color} />;
-          }
-        },
+        tabBarIcon: ({ focused }) => (
+          <View style={[styles.tabIconBubble, focused && styles.tabIconBubbleActive]}>
+            <Text style={styles.tabIconEmoji}>{tabIcons[route.name]}</Text>
+          </View>
+        ),
       })}
     >
       <Tabs.Screen name="Home" component={HomeScreen} />
@@ -133,3 +138,21 @@ export function AppNavigator() {
     </NavigationContainer>
   );
 }
+
+const styles = StyleSheet.create({
+  tabIconBubble: {
+    width: 42,
+    height: 42,
+    borderRadius: 21,
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "rgba(143, 201, 232, 0.12)",
+  },
+  tabIconBubbleActive: {
+    backgroundColor: "rgba(143, 201, 232, 0.24)",
+    transform: [{ translateY: -1 }],
+  },
+  tabIconEmoji: {
+    fontSize: 20,
+  },
+});
