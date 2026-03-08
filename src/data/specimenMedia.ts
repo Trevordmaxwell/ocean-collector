@@ -48,10 +48,9 @@ export const shellSpecimenMedia = {
     "https://commons.wikimedia.org/wiki/File:Dinocardium_robustum_01.jpg",
     "H. Zell • CC BY-SA 3.0",
   ),
-  turkeyWing: wikimedia(
-    "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4d/Arca_zebra_%28zebra_ark_clam_shell%29_%28Sanibel_Island%2C_Florida%2C_USA%29_2_%2849767573871%29.jpg/960px-Arca_zebra_%28zebra_ark_clam_shell%29_%28Sanibel_Island%2C_Florida%2C_USA%29_2_%2849767573871%29.jpg",
-    "https://commons.wikimedia.org/wiki/File:Arca_zebra_(zebra_ark_clam_shell)_(Sanibel_Island,_Florida,_USA)_2_(49767573871).jpg",
-    "James St. John • CC BY 2.0",
+  turkeyWing: localArtwork(
+    require("../../assets/specimens/turkey-wing.png"),
+    "Ocean Collector original art",
   ),
   scotchBonnet: wikimedia(
     "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6d/Semicassis_Granulata_Shell.JPG/960px-Semicassis_Granulata_Shell.JPG",
