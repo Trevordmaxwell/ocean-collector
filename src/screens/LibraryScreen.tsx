@@ -1,0 +1,164 @@
+import { useState } from "react";
+import { Pressable, ScrollView, StyleSheet, Text, TextInput, View } from "react-native";
+
+import { Chip } from "../components/Chip";
+import { FindTile } from "../components/FindTile";
+import { OceanCard } from "../components/OceanCard";
+import { ScreenShell } from "../components/ScreenShell";
+import { SectionTitle } from "../components/SectionTitle";
+import { getLibraryItems } from "../data/library";
+import { useOceanStore } from "../store/useOceanStore";
+import { palette, radius, spacing, typography } from "../theme";
+import type { LibraryCategory } from "../types/models";
+import type { RootScreenProps } from "../navigation/types";
+
+function getFilterOptions(category: LibraryCategory) {
+  if (category === "shell") {
+    const items = getLibraryItems("shell");
+    return [...new Set(items.map((item) => item.shellType))];
+  }
+
+  const items = getLibraryItems("sharkTooth");
+  return [...new Set(items.map((item) => item.toothProfile.serration))];
+}
+
+export function LibraryScreen({ navigation, route }: RootScreenProps<"Library">) {
+  const { category } = route.params;
+  const saveIdentifiedFind = useOceanStore((state) => state.saveIdentifiedFind);
+  const [query, setQuery] = useState("");
+  const [activeFilter, setActiveFilter] = useState("All");
+
+  const items =
+    category === "shell"
+      ? getLibraryItems("shell").filter((item) => {
+          const searchText = `${item.commonName} ${item.scientificName ?? ""} ${item.summary} ${item.lookalikes.join(" ")}`.toLowerCase();
+          const matchesQuery =
+            query.trim().length === 0 || searchText.includes(query.toLowerCase());
+          const matchesFilter =
+            activeFilter === "All" || item.shellType === activeFilter;
+
+          return matchesQuery && matchesFilter;
+        })
+      : getLibraryItems("sharkTooth").filter((item) => {
+          const searchText = `${item.commonName} ${item.scientificName ?? ""} ${item.summary} ${item.lookalikes.join(" ")}`.toLowerCase();
+          const matchesQuery =
+            query.trim().length === 0 || searchText.includes(query.toLowerCase());
+          const matchesFilter =
+            activeFilter === "All" || item.toothProfile.serration === activeFilter;
+
+          return matchesQuery && matchesFilter;
+        });
+
+  const filters = ["All", ...getFilterOptions(category)];
+
+  return (
+    <ScreenShell>
+      <View style={styles.topSpacing} />
+      <Pressable onPress={() => navigation.goBack()}>
+        <Text style={styles.backButton}>← Back</Text>
+      </Pressable>
+
+      <OceanCard
+        title={category === "shell" ? "Shell Library" : "Shark Tooth Library"}
+        subtitle="Compare shapes, colors, textures, and lookalikes without needing the camera flow."
+        icon={category === "shell" ? "📖" : "🗂️"}
+      >
+        <TextInput
+          placeholder={category === "shell" ? "Search scallop, olive, glossy..." : "Search serrated, broad, sand tiger..."}
+          placeholderTextColor={palette.mist}
+          style={styles.input}
+          value={query}
+          onChangeText={setQuery}
+        />
+
+        <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.filterRow}>
+          {filters.map((filter) => (
+            <Chip
+              key={filter}
+              label={filter}
+              active={filter === activeFilter}
+              onPress={() => setActiveFilter(filter)}
+            />
+          ))}
+        </ScrollView>
+      </OceanCard>
+
+      <SectionTitle
+        title={`${items.length} guide cards`}
+        subtitle="Open a card for details, facts, and a save-to-collection shortcut."
+      />
+
+      <View style={styles.list}>
+        {items.map((item) => (
+          <FindTile
+            key={item.id}
+            title={item.commonName}
+            subtitle={item.scientificName ?? item.summary}
+            emoji={item.specimenEmoji}
+              palettePair={item.cardPalette}
+              detail={item.summary}
+              trailingLabel={"shellType" in item ? item.shellType : item.toothProfile.serration}
+              onPress={() => navigation.navigate("ItemDetail", { category, id: item.id })}
+            />
+          ))}
+      </View>
+
+      {items.length > 0 ? (
+        <Pressable
+          onPress={() =>
+            saveIdentifiedFind({
+              category,
+              referenceId: items[0]!.id,
+              location: "Manual compare save",
+              notes: "Saved from the browsing library.",
+              source: "manual",
+            })
+          }
+          style={styles.footerButton}
+        >
+          <Text style={styles.footerButtonLabel}>Quick save first visible match</Text>
+        </Pressable>
+      ) : null}
+    </ScreenShell>
+  );
+}
+
+const styles = StyleSheet.create({
+  topSpacing: {
+    height: spacing.sm,
+  },
+  backButton: {
+    fontFamily: typography.bodyBold,
+    color: palette.deep,
+    fontSize: 15,
+  },
+  input: {
+    borderRadius: radius.md,
+    backgroundColor: "rgba(255,255,255,0.75)",
+    borderWidth: 1,
+    borderColor: palette.border,
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.sm,
+    fontFamily: typography.body,
+    fontSize: 15,
+    color: palette.ink,
+  },
+  filterRow: {
+    gap: spacing.xs,
+  },
+  list: {
+    gap: spacing.sm,
+  },
+  footerButton: {
+    alignItems: "center",
+    justifyContent: "center",
+    paddingVertical: spacing.md,
+    borderRadius: radius.pill,
+    backgroundColor: palette.deep,
+  },
+  footerButtonLabel: {
+    fontFamily: typography.headingSoft,
+    fontSize: 16,
+    color: palette.pearl,
+  },
+});
