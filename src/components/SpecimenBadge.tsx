@@ -1,15 +1,17 @@
 import { useEffect, useState } from "react";
-import { Image, StyleSheet, Text, View } from "react-native";
+import { Image, StyleSheet, Text, View, type ImageSourcePropType } from "react-native";
 
 import { palette, radius, shadows } from "../theme";
 
 interface SpecimenBadgeProps {
+  imageSource?: ImageSourcePropType;
   imageUri?: string;
   emoji?: string;
   size?: number;
 }
 
 export function SpecimenBadge({
+  imageSource,
   imageUri,
   emoji = "🫧",
   size = 60,
@@ -18,9 +20,9 @@ export function SpecimenBadge({
 
   useEffect(() => {
     setDidError(false);
-  }, [imageUri]);
+  }, [imageSource, imageUri]);
 
-  const showImage = Boolean(imageUri) && !didError;
+  const showImage = Boolean(imageSource || imageUri) && !didError;
 
   return (
     <View
@@ -35,7 +37,7 @@ export function SpecimenBadge({
     >
       {showImage ? (
         <Image
-          source={{ uri: imageUri }}
+          source={imageSource ?? { uri: imageUri }}
           resizeMode="contain"
           style={styles.image}
           onError={() => setDidError(true)}

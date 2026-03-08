@@ -77,6 +77,7 @@ export function CollectionScreen({ navigation }: TabScreenProps<"Collection">) {
               title={item.title}
               subtitle={`${item.subtitle} • ${item.location}`}
               emoji={item.specimenEmoji}
+              imageSource={item.specimenImageSource}
               imageUri={item.specimenImageUri}
               palettePair={item.cardPalette}
               detail={item.notes || "No notes yet"}

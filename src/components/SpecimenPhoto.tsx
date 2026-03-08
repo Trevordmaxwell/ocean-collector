@@ -1,15 +1,17 @@
 import { useEffect, useState } from "react";
-import { Image, StyleSheet, Text, View } from "react-native";
+import { Image, StyleSheet, Text, View, type ImageSourcePropType } from "react-native";
 
 import { palette, radius, shadows, spacing, typography } from "../theme";
 
 interface SpecimenPhotoProps {
+  imageSource?: ImageSourcePropType;
   imageUri?: string;
   emoji?: string;
   title: string;
 }
 
 export function SpecimenPhoto({
+  imageSource,
   imageUri,
   emoji = "🫧",
   title,
@@ -18,16 +20,16 @@ export function SpecimenPhoto({
 
   useEffect(() => {
     setDidError(false);
-  }, [imageUri]);
+  }, [imageSource, imageUri]);
 
-  const showImage = Boolean(imageUri) && !didError;
+  const showImage = Boolean(imageSource || imageUri) && !didError;
 
   return (
     <View style={styles.frame}>
       {showImage ? (
         <Image
           accessibilityLabel={title}
-          source={{ uri: imageUri }}
+          source={imageSource ?? { uri: imageUri }}
           resizeMode="contain"
           style={styles.image}
           onError={() => setDidError(true)}

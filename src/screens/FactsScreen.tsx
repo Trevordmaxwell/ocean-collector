@@ -54,6 +54,7 @@ export function FactsScreen({ navigation }: RootScreenProps<"Facts">) {
           title={item.commonName}
           subtitle={item.funFacts[0]}
           icon={item.specimenEmoji}
+          imageSource={item.specimenImageSource}
           imageUri={item.specimenImageUri}
           accent={item.cardPalette}
         />
@@ -66,6 +67,7 @@ export function FactsScreen({ navigation }: RootScreenProps<"Facts">) {
           title={item.commonName}
           subtitle={item.funFacts[0]}
           icon={item.specimenEmoji}
+          imageSource={item.specimenImageSource}
           imageUri={item.specimenImageUri}
           accent={item.cardPalette}
         />

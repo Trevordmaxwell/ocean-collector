@@ -39,13 +39,15 @@ export function CollectionItemScreen({
         title={item.title}
         subtitle={item.subtitle}
         icon={item.specimenEmoji}
+        imageSource={item.specimenImageSource}
         imageUri={item.specimenImageUri}
         accent={item.cardPalette}
       >
-        {item.specimenImageUri ? (
+        {item.specimenImageSource || item.specimenImageUri ? (
           <>
             <SpecimenPhoto
               title={item.title}
+              imageSource={item.specimenImageSource}
               imageUri={item.specimenImageUri}
               emoji={item.specimenEmoji}
             />
@@ -58,7 +60,9 @@ export function CollectionItemScreen({
                 }}
               >
                 <Text style={styles.photoCredit}>
-                  Guide photo via Wikimedia Commons • {item.specimenImageCredit}
+                  {item.specimenImageSourceUrl
+                    ? `Guide photo via Wikimedia Commons • ${item.specimenImageCredit}`
+                    : `Artwork • ${item.specimenImageCredit}`}
                 </Text>
               </Pressable>
             ) : null}

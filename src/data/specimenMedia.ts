@@ -1,3 +1,5 @@
+import type { ImageSourcePropType } from "react-native";
+
 const wikimedia = (
   specimenImageUri: string,
   specimenImageSourceUrl: string,
@@ -8,16 +10,23 @@ const wikimedia = (
   specimenImageCredit,
 });
 
+const localArtwork = (
+  specimenImageSource: ImageSourcePropType,
+  specimenImageCredit: string,
+) => ({
+  specimenImageSource,
+  specimenImageCredit,
+});
+
 export const shellSpecimenMedia = {
   letteredOlive: wikimedia(
     "https://upload.wikimedia.org/wikipedia/commons/1/1c/Oliva_sayana_%28lettered_olive_snail_shell%29_%28Sanibel_Island%2C_Florida%2C_USA%29_%2849767621651%29.jpg",
     "https://commons.wikimedia.org/wiki/File:Oliva_sayana_(lettered_olive_snail_shell)_(Sanibel_Island,_Florida,_USA)_(49767621651).jpg",
     "James St. John • CC BY 2.0",
   ),
-  calicoScallop: wikimedia(
-    "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7b/Argopecten_gibbus_02.jpg/960px-Argopecten_gibbus_02.jpg",
-    "https://commons.wikimedia.org/wiki/File:Argopecten_gibbus_02.jpg",
-    "H. Zell • CC BY-SA 3.0",
+  calicoScallop: localArtwork(
+    require("../../assets/specimens/calico-scallop.png"),
+    "Ocean Collector original art",
   ),
   lightningWhelk: wikimedia(
     "https://upload.wikimedia.org/wikipedia/commons/thumb/8/88/Busycon_sinistrum_%28lightning_whelk%29_%28offshore_Carrabelle%2C_Florida%2C_USA%29_2_%2824570696705%29.jpg/960px-Busycon_sinistrum_%28lightning_whelk%29_%28offshore_Carrabelle%2C_Florida%2C_USA%29_2_%2824570696705%29.jpg",

@@ -95,6 +95,7 @@ export function LibraryScreen({ navigation, route }: RootScreenProps<"Library">)
             title={item.commonName}
             subtitle={item.scientificName ?? item.summary}
             emoji={item.specimenEmoji}
+            imageSource={item.specimenImageSource}
             imageUri={item.specimenImageUri}
             palettePair={item.cardPalette}
             detail={item.summary}

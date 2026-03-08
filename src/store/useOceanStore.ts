@@ -25,6 +25,7 @@ function makeCollectionItem(input: {
   notes: string;
   pointsAwarded: number;
   specimenEmoji: string;
+  specimenImageSource?: UserCollectionItem["specimenImageSource"];
   specimenImageUri?: string;
   specimenImageSourceUrl?: string;
   specimenImageCredit?: string;
@@ -44,6 +45,7 @@ function makeCollectionItem(input: {
     pointsAwarded: input.pointsAwarded,
     userPhotoUri: input.userPhotoUri,
     specimenEmoji: input.specimenEmoji,
+    specimenImageSource: input.specimenImageSource,
     specimenImageUri: input.specimenImageUri,
     specimenImageSourceUrl: input.specimenImageSourceUrl,
     specimenImageCredit: input.specimenImageCredit,
@@ -106,6 +108,7 @@ export const useOceanStore = create<OceanStoreState>()(
             userPhotoUri,
             pointsAwarded: reward.points,
             specimenEmoji: item.specimenEmoji,
+            specimenImageSource: item.specimenImageSource,
             specimenImageUri: item.specimenImageUri,
             specimenImageSourceUrl: item.specimenImageSourceUrl,
             specimenImageCredit: item.specimenImageCredit,

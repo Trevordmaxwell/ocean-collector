@@ -1,3 +1,4 @@
+import type { ImageSourcePropType } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 
@@ -8,6 +9,7 @@ interface FindTileProps {
   title: string;
   subtitle: string;
   emoji?: string;
+  imageSource?: ImageSourcePropType;
   imageUri?: string;
   palettePair: [string, string];
   detail?: string;
@@ -19,6 +21,7 @@ export function FindTile({
   title,
   subtitle,
   emoji,
+  imageSource,
   imageUri,
   palettePair,
   detail,
@@ -28,7 +31,12 @@ export function FindTile({
   return (
     <Pressable onPress={onPress} style={styles.wrap}>
       <LinearGradient colors={palettePair} style={styles.tile}>
-        <SpecimenBadge emoji={emoji} imageUri={imageUri} size={58} />
+        <SpecimenBadge
+          emoji={emoji}
+          imageSource={imageSource}
+          imageUri={imageUri}
+          size={58}
+        />
         <View style={styles.copy}>
           <Text style={styles.title}>{title}</Text>
           <Text style={styles.subtitle}>{subtitle}</Text>

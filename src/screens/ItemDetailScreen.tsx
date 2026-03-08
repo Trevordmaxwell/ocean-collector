@@ -39,12 +39,14 @@ export function ItemDetailScreen({ navigation, route }: RootScreenProps<"ItemDet
         title={item.commonName}
         subtitle={item.scientificName ?? item.summary}
         icon={item.specimenEmoji}
+        imageSource={item.specimenImageSource}
         imageUri={item.specimenImageUri}
         accent={item.cardPalette}
       >
         <Text style={styles.summary}>{item.summary}</Text>
         <SpecimenPhoto
           title={item.commonName}
+          imageSource={item.specimenImageSource}
           imageUri={item.specimenImageUri}
           emoji={item.specimenEmoji}
         />
@@ -57,7 +59,9 @@ export function ItemDetailScreen({ navigation, route }: RootScreenProps<"ItemDet
             }}
           >
             <Text style={styles.photoCredit}>
-              Specimen photo via Wikimedia Commons • {item.specimenImageCredit}
+              {item.specimenImageSourceUrl
+                ? `Specimen photo via Wikimedia Commons • ${item.specimenImageCredit}`
+                : `Artwork • ${item.specimenImageCredit}`}
             </Text>
           </Pressable>
         ) : null}

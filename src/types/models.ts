@@ -1,3 +1,5 @@
+import type { ImageSourcePropType } from "react-native";
+
 export type LibraryCategory = "shell" | "sharkTooth";
 export type CollectionCategory = LibraryCategory | "seaGlass" | "trash";
 export type BadgeRuleKind =
@@ -36,6 +38,7 @@ export interface BaseLibraryItem {
   funFacts: string[];
   lookalikes: string[];
   specimenEmoji: string;
+  specimenImageSource?: ImageSourcePropType;
   specimenImageUri?: string;
   specimenImageSourceUrl?: string;
   specimenImageCredit?: string;
@@ -173,6 +176,7 @@ export interface UserCollectionItem {
   pointsAwarded: number;
   userPhotoUri?: string;
   specimenEmoji: string;
+  specimenImageSource?: ImageSourcePropType;
   specimenImageUri?: string;
   specimenImageSourceUrl?: string;
   specimenImageCredit?: string;

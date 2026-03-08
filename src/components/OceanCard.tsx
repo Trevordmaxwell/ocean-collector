@@ -5,6 +5,7 @@ import {
   StyleSheet,
   Text,
   View,
+  type ImageSourcePropType,
   type StyleProp,
   type ViewStyle,
 } from "react-native";
@@ -16,6 +17,7 @@ interface OceanCardProps extends PropsWithChildren {
   title?: string;
   subtitle?: string;
   icon?: string;
+  imageSource?: ImageSourcePropType;
   imageUri?: string;
   accent?: readonly [string, string, ...string[]];
   onPress?: () => void;
@@ -26,6 +28,7 @@ export function OceanCard({
   title,
   subtitle,
   icon,
+  imageSource,
   imageUri,
   accent,
   onPress,
@@ -43,7 +46,14 @@ export function OceanCard({
             {title ? <Text style={styles.title}>{title}</Text> : null}
             {subtitle ? <Text style={styles.subtitle}>{subtitle}</Text> : null}
           </View>
-          {imageUri || icon ? <SpecimenBadge emoji={icon} imageUri={imageUri} size={60} /> : null}
+          {imageSource || imageUri || icon ? (
+            <SpecimenBadge
+              emoji={icon}
+              imageSource={imageSource}
+              imageUri={imageUri}
+              size={60}
+            />
+          ) : null}
         </View>
       )}
       {children}
