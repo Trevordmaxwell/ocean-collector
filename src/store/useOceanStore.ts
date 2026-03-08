@@ -7,6 +7,7 @@ import {
   evaluateBadgeUnlocks,
   getLevelFromPoints,
   getPointsForSeaGlass,
+  getTrashMilestoneCelebration,
   getPointsForTrash,
 } from "../services/rewardEngine";
 import type {
@@ -58,6 +59,7 @@ export const useOceanStore = create<OceanStoreState>()(
     trashEntries: [],
     findLogs: [],
     unlockedBadgeIds: [],
+    pendingCelebration: null,
     points: {
       total: 0,
       level: 1,
@@ -226,7 +228,9 @@ export const useOceanStore = create<OceanStoreState>()(
           }),
         };
       }),
-    addTrashPickup: ({ trashCategoryId, count, location, note, userPhotoUri }) =>
+    addTrashPickup: ({ trashCategoryId, count, location, note, userPhotoUri }) => {
+      let celebration = null;
+
       set((state) => {
         const category = trashCategories.find((entry) => entry.id === trashCategoryId);
         const reward = createRewardTransaction({
@@ -265,10 +269,15 @@ export const useOceanStore = create<OceanStoreState>()(
         ];
 
         const nextTotal = state.points.total + reward.points;
+        const previousTrashPieceCount = state.trashEntries.reduce(
+          (total, entry) => total + entry.count,
+          0,
+        );
         const trashPieceCount = nextTrashEntries.reduce(
           (total, entry) => total + entry.count,
           0,
         );
+        celebration = getTrashMilestoneCelebration(previousTrashPieceCount, trashPieceCount);
 
         return {
           trashEntries: nextTrashEntries,
@@ -295,13 +304,18 @@ export const useOceanStore = create<OceanStoreState>()(
             collection: nextCollection,
             trashPieceCount,
           }),
+          pendingCelebration: celebration,
         };
-      }),
+      });
+
+      return celebration;
+    },
     toggleFavorite: (itemId) =>
       set((state) => ({
         collection: state.collection.map((item) =>
           item.id === itemId ? { ...item, favorite: !item.favorite } : item,
         ),
       })),
+    dismissCelebration: () => set({ pendingCelebration: null }),
   }),
 );

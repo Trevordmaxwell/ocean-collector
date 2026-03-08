@@ -81,7 +81,7 @@ export function AddTrashScreen({ navigation }: RootScreenProps<"AddTrash">) {
 
         <Pressable
           onPress={() => {
-            addTrashPickup({
+            const celebration = addTrashPickup({
               trashCategoryId,
               count,
               location: location || "Beach cleanup",
@@ -90,7 +90,9 @@ export function AddTrashScreen({ navigation }: RootScreenProps<"AddTrash">) {
             Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success).catch(
               () => undefined,
             );
-            Alert.alert("Logged!", `${count} cleanup item${count > 1 ? "s" : ""} saved.`);
+            if (!celebration) {
+              Alert.alert("Logged!", `${count} cleanup item${count > 1 ? "s" : ""} saved.`);
+            }
             navigation.goBack();
           }}
           style={styles.primaryButton}

@@ -141,6 +141,16 @@ export interface RewardBadge {
   threshold: number;
 }
 
+export interface MilestoneCelebration {
+  id: string;
+  kind: "trash";
+  title: string;
+  description: string;
+  threshold: number;
+  rewardLabel: string;
+  accent: [string, string];
+}
+
 export interface FindLog {
   id: string;
   category: CollectionCategory;
@@ -191,6 +201,7 @@ export interface OceanStoreState {
   findLogs: FindLog[];
   points: UserPoints;
   unlockedBadgeIds: string[];
+  pendingCelebration: MilestoneCelebration | null;
   markWelcomeSeen: () => void;
   saveIdentifiedFind: (input: {
     category: LibraryCategory;
@@ -201,6 +212,9 @@ export interface OceanStoreState {
     source: "ai" | "manual";
   }) => void;
   addSeaGlassFind: (input: Omit<SeaGlassEntry, "id" | "foundDate">) => void;
-  addTrashPickup: (input: Omit<TrashEntry, "id" | "foundDate" | "label">) => void;
+  addTrashPickup: (
+    input: Omit<TrashEntry, "id" | "foundDate" | "label">,
+  ) => MilestoneCelebration | null;
   toggleFavorite: (itemId: string) => void;
+  dismissCelebration: () => void;
 }

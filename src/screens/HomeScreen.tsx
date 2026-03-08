@@ -194,6 +194,7 @@ const styles = StyleSheet.create({
   quickRow: {
     flexDirection: "row",
     gap: spacing.sm,
+    alignItems: "stretch",
   },
   quickButton: {
     flex: 1,

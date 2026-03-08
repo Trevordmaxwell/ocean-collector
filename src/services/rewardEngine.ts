@@ -1,6 +1,7 @@
 import { trashCategories } from "../data";
 import type {
   CollectionCategory,
+  MilestoneCelebration,
   RewardAction,
   RewardBadge,
   RewardTransaction,
@@ -8,6 +9,33 @@ import type {
 } from "../types/models";
 
 const LEVEL_STEP = 90;
+
+const trashMilestones: Array<{
+  threshold: number;
+  title: string;
+  description: string;
+}> = [
+  {
+    threshold: 3,
+    title: "Tiny Tide Turnaround",
+    description: "Three beach litter pieces rescued. The shoreline already looks a little happier.",
+  },
+  {
+    threshold: 10,
+    title: "Beach Helper",
+    description: "Ten cleanup pieces collected. You are officially helping the tide line sparkle.",
+  },
+  {
+    threshold: 25,
+    title: "Wave Watch Guardian",
+    description: "Twenty-five pieces rescued. That is a real splash of beach stewardship.",
+  },
+  {
+    threshold: 50,
+    title: "Shoreline Superstar",
+    description: "Fifty cleanup pieces collected. The beach bucket is basically legendary now.",
+  },
+];
 
 export const rewardBadges: RewardBadge[] = [
   {
@@ -140,6 +168,31 @@ export function getPointsForTrash(trashCategoryId: string, count: number) {
 
 export function getPointsForSeaGlass(bonus: number) {
   return baseRewardLabels.log_sea_glass.points + bonus;
+}
+
+export function getTrashMilestoneCelebration(
+  previousTrashPieceCount: number,
+  nextTrashPieceCount: number,
+): MilestoneCelebration | null {
+  const reached = trashMilestones.find(
+    (milestone) =>
+      previousTrashPieceCount < milestone.threshold &&
+      nextTrashPieceCount >= milestone.threshold,
+  );
+
+  if (!reached) {
+    return null;
+  }
+
+  return {
+    id: createId("celebration"),
+    kind: "trash",
+    title: reached.title,
+    description: reached.description,
+    threshold: reached.threshold,
+    rewardLabel: `${reached.threshold} cleanup pieces`,
+    accent: ["#BEE6F7", "#DFF7EF"],
+  };
 }
 
 export function getLevelFromPoints(total: number) {

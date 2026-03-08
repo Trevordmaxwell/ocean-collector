@@ -14,9 +14,11 @@ import { useFonts as useExpoFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
 import { StatusBar } from "expo-status-bar";
 import { useEffect } from "react";
+import { View } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 
+import { CelebrationOverlay } from "./src/components/CelebrationOverlay";
 import { AppNavigator } from "./src/navigation/AppNavigator";
 
 SplashScreen.preventAutoHideAsync().catch(() => undefined);
@@ -51,7 +53,10 @@ export default function App() {
     <GestureHandlerRootView style={{ flex: 1 }}>
       <SafeAreaProvider>
         <StatusBar style="dark" />
-        <AppNavigator />
+        <View style={{ flex: 1 }}>
+          <AppNavigator />
+          <CelebrationOverlay />
+        </View>
       </SafeAreaProvider>
     </GestureHandlerRootView>
   );

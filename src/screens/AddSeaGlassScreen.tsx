@@ -69,7 +69,8 @@ export function AddSeaGlassScreen({ navigation }: RootScreenProps<"AddSeaGlass">
           ))}
         </View>
 
-        <Text style={styles.label}>Shape</Text>
+        <Text style={styles.label}>Shape details</Text>
+        <Text style={styles.helper}>Main shape</Text>
         <View style={styles.choiceWrap}>
           {shapes.map((entry) => (
             <Chip
@@ -81,7 +82,7 @@ export function AddSeaGlassScreen({ navigation }: RootScreenProps<"AddSeaGlass">
           ))}
         </View>
 
-        <Text style={styles.label}>Flat or curved?</Text>
+        <Text style={styles.helper}>Flat or curved</Text>
         <View style={styles.choiceWrap}>
           {surfaces.map((entry) => (
             <Chip
@@ -92,8 +93,7 @@ export function AddSeaGlassScreen({ navigation }: RootScreenProps<"AddSeaGlass">
             />
           ))}
         </View>
-
-        <Text style={styles.helper}>
+        <Text style={styles.shapeHelper}>
           Flat pieces often come from bottle walls, while curved ones can feel like little rim or neck treasures.
         </Text>
 
@@ -164,6 +164,12 @@ const styles = StyleSheet.create({
     color: palette.deep,
     fontSize: 14,
     lineHeight: 20,
+  },
+  shapeHelper: {
+    fontFamily: typography.body,
+    color: palette.mist,
+    fontSize: 13,
+    lineHeight: 18,
   },
   choiceWrap: {
     flexDirection: "row",

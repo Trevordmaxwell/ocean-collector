@@ -20,8 +20,8 @@ export const shellSpecimenMedia = {
     "H. Zell • CC BY-SA 3.0",
   ),
   lightningWhelk: wikimedia(
-    "https://upload.wikimedia.org/wikipedia/commons/thumb/8/80/Busycon_sinistrum_%28lightning_whelk%29_2_%2824466804312%29.jpg/960px-Busycon_sinistrum_%28lightning_whelk%29_2_%2824466804312%29.jpg",
-    "https://commons.wikimedia.org/wiki/File:Busycon_sinistrum_(lightning_whelk)_2_(24466804312).jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/8/88/Busycon_sinistrum_%28lightning_whelk%29_%28offshore_Carrabelle%2C_Florida%2C_USA%29_2_%2824570696705%29.jpg/960px-Busycon_sinistrum_%28lightning_whelk%29_%28offshore_Carrabelle%2C_Florida%2C_USA%29_2_%2824570696705%29.jpg",
+    "https://commons.wikimedia.org/wiki/File:Busycon_sinistrum_(lightning_whelk)_(offshore_Carrabelle,_Florida,_USA)_2_(24570696705).jpg",
     "James St. John • CC BY 2.0",
   ),
   moonSnail: wikimedia(

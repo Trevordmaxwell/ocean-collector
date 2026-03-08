@@ -1,12 +1,13 @@
 import type { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
 import type { CompositeScreenProps } from "@react-navigation/native";
+import type { NavigatorScreenParams } from "@react-navigation/native";
 import type { NativeStackScreenProps } from "@react-navigation/native-stack";
 
 import type { CollectionCategory, LibraryCategory } from "../types/models";
 
 export type RootStackParamList = {
   Welcome: undefined;
-  MainTabs: undefined;
+  MainTabs: NavigatorScreenParams<MainTabParamList> | undefined;
   Identify: { category: LibraryCategory };
   Library: { category: LibraryCategory };
   ItemDetail: { category: LibraryCategory; id: string };

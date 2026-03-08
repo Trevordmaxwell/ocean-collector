@@ -16,7 +16,7 @@ import { RewardsScreen } from "../screens/RewardsScreen";
 import { SettingsScreen } from "../screens/SettingsScreen";
 import { WelcomeScreen } from "../screens/WelcomeScreen";
 import { useOceanStore } from "../store/useOceanStore";
-import { palette } from "../theme";
+import { palette, radius, shadows, spacing } from "../theme";
 import type { MainTabParamList, RootStackParamList } from "./types";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -31,15 +31,24 @@ function MainTabs() {
         tabBarInactiveTintColor: palette.mist,
         tabBarStyle: {
           position: "absolute",
-          backgroundColor: "rgba(255,255,255,0.92)",
+          left: spacing.md,
+          right: spacing.md,
+          bottom: spacing.sm,
+          height: 92,
+          paddingBottom: spacing.sm,
+          paddingTop: spacing.xs,
+          borderRadius: radius.lg,
+          backgroundColor: "rgba(255,255,255,0.96)",
           borderTopWidth: 0,
-          height: 78,
-          paddingBottom: 10,
-          paddingTop: 10,
+          ...shadows.card,
+        },
+        tabBarItemStyle: {
+          paddingVertical: spacing.xs,
         },
         tabBarLabelStyle: {
           fontFamily: "Nunito_700Bold",
-          fontSize: 12,
+          fontSize: 13,
+          marginTop: 2,
         },
         tabBarIcon: ({ color, size }) => {
           switch (route.name) {
