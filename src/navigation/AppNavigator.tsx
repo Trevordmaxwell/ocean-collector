@@ -2,6 +2,7 @@ import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { NavigationContainer, DefaultTheme } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { Pressable, Platform } from "react-native";
 
 import { CollectionItemScreen } from "../screens/CollectionItemScreen";
 import { CollectionScreen } from "../screens/CollectionScreen";
@@ -29,19 +30,32 @@ function MainTabs() {
         headerShown: false,
         tabBarActiveTintColor: palette.deep,
         tabBarInactiveTintColor: palette.mist,
-        tabBarStyle: {
-          position: "absolute",
-          left: spacing.md,
-          right: spacing.md,
-          bottom: spacing.sm,
-          height: 92,
-          paddingBottom: spacing.sm,
-          paddingTop: spacing.xs,
-          borderRadius: radius.lg,
-          backgroundColor: "rgba(255,255,255,0.96)",
-          borderTopWidth: 0,
-          ...shadows.card,
-        },
+        tabBarStyle:
+          Platform.OS === "web"
+            ? {
+                height: 104,
+                marginHorizontal: spacing.md,
+                marginBottom: spacing.md,
+                paddingBottom: spacing.sm,
+                paddingTop: spacing.xs,
+                borderRadius: radius.lg,
+                backgroundColor: "rgba(255,255,255,0.98)",
+                borderTopWidth: 0,
+                ...shadows.card,
+              }
+            : {
+                position: "absolute",
+                left: spacing.md,
+                right: spacing.md,
+                bottom: spacing.sm,
+                height: 92,
+                paddingBottom: spacing.sm,
+                paddingTop: spacing.xs,
+                borderRadius: radius.lg,
+                backgroundColor: "rgba(255,255,255,0.96)",
+                borderTopWidth: 0,
+                ...shadows.card,
+              },
         tabBarItemStyle: {
           paddingVertical: spacing.xs,
         },
@@ -50,6 +64,17 @@ function MainTabs() {
           fontSize: 13,
           marginTop: 2,
         },
+        tabBarButton: ({ children, onPress, onLongPress, style, accessibilityState }) => (
+          <Pressable
+            accessibilityRole="button"
+            accessibilityState={accessibilityState}
+            onPress={onPress}
+            onLongPress={onLongPress}
+            style={style}
+          >
+            {children}
+          </Pressable>
+        ),
         tabBarIcon: ({ color, size }) => {
           switch (route.name) {
             case "Home":
