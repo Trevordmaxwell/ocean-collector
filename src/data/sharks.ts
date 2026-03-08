@@ -1,4 +1,5 @@
 import type { SharkSpecies } from "../types/models";
+import { sharkSpecimenMedia } from "./specimenMedia";
 
 export const sharkSpecies: SharkSpecies[] = [
   {
@@ -8,6 +9,7 @@ export const sharkSpecies: SharkSpecies[] = [
     commonName: "Sand Tiger Tooth",
     scientificName: "Carcharias taurus",
     specimenEmoji: "🦷",
+    ...sharkSpecimenMedia.sandTiger,
     cardPalette: ["#CBE8F7", "#F4FBFF"],
     summary:
       "A classic beachcomber favorite with a tall center cusp and tiny side points.",
@@ -63,6 +65,7 @@ export const sharkSpecies: SharkSpecies[] = [
     commonName: "Great White Tooth",
     scientificName: "Carcharodon carcharias",
     specimenEmoji: "🦈",
+    ...sharkSpecimenMedia.greatWhite,
     cardPalette: ["#C8D7EA", "#F4F8FD"],
     summary:
       "A broad triangular tooth with bold serrations built for slicing big prey.",
@@ -118,6 +121,7 @@ export const sharkSpecies: SharkSpecies[] = [
     commonName: "Lemon Shark Tooth",
     scientificName: "Negaprion brevirostris",
     specimenEmoji: "🍋",
+    ...sharkSpecimenMedia.lemonShark,
     cardPalette: ["#F9EAB7", "#FFF8D8"],
     summary:
       "A balanced triangular tooth with softer serrations and a slightly offset shape.",
@@ -173,6 +177,7 @@ export const sharkSpecies: SharkSpecies[] = [
     commonName: "Tiger Shark Tooth",
     scientificName: "Galeocerdo cuvier",
     specimenEmoji: "🐯",
+    ...sharkSpecimenMedia.tigerShark,
     cardPalette: ["#D1E6F3", "#FFF6D6"],
     summary:
       "A deeply notched, heavily serrated tooth that looks bold and dramatic.",
@@ -228,6 +233,7 @@ export const sharkSpecies: SharkSpecies[] = [
     commonName: "Mako Tooth",
     scientificName: "Isurus oxyrinchus",
     specimenEmoji: "💙",
+    ...sharkSpecimenMedia.mako,
     cardPalette: ["#BFE0F7", "#EEF8FF"],
     summary:
       "A sleek, narrow tooth with smooth edges and a shape built for speed and fish-catching.",
@@ -272,6 +278,174 @@ export const sharkSpecies: SharkSpecies[] = [
         title: "Smooth edge clue",
         body: "Smooth edges help collectors separate mako-like teeth from more saw-toothed sharks.",
         icon: "🪶",
+        mood: "curiosity",
+      },
+    ],
+  },
+  {
+    id: "bull-shark",
+    category: "sharkTooth",
+    sharkName: "Bull Shark",
+    commonName: "Bull Shark Tooth",
+    scientificName: "Carcharhinus leucas",
+    specimenEmoji: "🪨",
+    ...sharkSpecimenMedia.bullShark,
+    cardPalette: ["#D8DFE6", "#F7FAFC"],
+    summary:
+      "A sturdy triangular tooth with neat serrations and a broad, powerful look.",
+    identifyingFeatures: [
+      "Broad triangular crown with serrated edges",
+      "Robust root that looks chunky compared with slimmer sharks",
+      "Usually feels compact rather than dramatically hooked",
+    ],
+    colors: ["gray", "charcoal", "fossil tan"],
+    shapeNotes: ["sturdy", "triangular", "compact"],
+    sizeRange: "0.5 to 1.25 inches",
+    regions: ["Atlantic Coast", "Gulf Coast", "Fossil rivers"],
+    habitat: "Warm coastal seas, estuaries, and even some freshwater systems.",
+    era: "Modern species, often found as fossil teeth.",
+    toothProfile: {
+      serration: "fine",
+      width: "broad",
+      curvature: "slight",
+      mouthRegion:
+        "Front teeth can look straighter and broader, while side teeth may lean a bit more.",
+      toothUse: "Cutting fish and other prey in mixed coastal habitats.",
+      comparisonTips: [
+        "Bull shark teeth are broader than lemon shark teeth but not as dramatic as tiger teeth",
+        "Look for a tough compact shape without a deep notch",
+      ],
+    },
+    funFacts: [
+      "Bull sharks are famous for tolerating both saltwater and freshwater.",
+      "Collectors often compare bull shark teeth against lemon and great white teeth because they can feel like a middle ground.",
+    ],
+    lookalikes: ["Lemon shark teeth", "Great white teeth"],
+    factCards: [
+      {
+        id: "bull-freshwater",
+        title: "River-ready shark",
+        body: "Bull sharks are one of the best-known sharks for moving between ocean water and freshwater.",
+        icon: "🏞️",
+        mood: "wow",
+      },
+      {
+        id: "bull-shape",
+        title: "Compact cutter",
+        body: "The sturdy triangular shape is one reason bull shark teeth feel chunky and confident in a compare tray.",
+        icon: "📐",
+        mood: "curiosity",
+      },
+    ],
+  },
+  {
+    id: "blacktip-shark",
+    category: "sharkTooth",
+    sharkName: "Blacktip Shark",
+    commonName: "Blacktip Shark Tooth",
+    scientificName: "Carcharhinus limbatus",
+    specimenEmoji: "🪄",
+    ...sharkSpecimenMedia.blacktipShark,
+    cardPalette: ["#C9E4F0", "#F4FBFE"],
+    summary:
+      "A sleek smaller tooth with tidy serrations and a crisp, fish-catching profile.",
+    identifyingFeatures: [
+      "Slim triangular crown",
+      "Fine serrations along the edges",
+      "Usually narrower and more delicate than bull shark teeth",
+    ],
+    colors: ["slate", "gray", "black fossil"],
+    shapeNotes: ["slim", "triangular", "tidy"],
+    sizeRange: "0.4 to 1 inch",
+    regions: ["Atlantic Coast", "Gulf Coast"],
+    habitat: "Warm nearshore water where blacktips often chase schools of fish.",
+    era: "Modern species that also appears in fossil collections.",
+    toothProfile: {
+      serration: "fine",
+      width: "balanced",
+      curvature: "slight",
+      mouthRegion:
+        "Upper teeth are broader, while lower teeth can be noticeably more slender and upright.",
+      toothUse: "Grabbing and slicing smaller schooling fish.",
+      comparisonTips: [
+        "Blacktip teeth often look slimmer than bull shark teeth",
+        "The overall feel is neat and sharp rather than chunky or notched",
+      ],
+    },
+    funFacts: [
+      "Blacktip sharks are famous for spinning leaps while chasing fish.",
+      "Their teeth can be a fun challenge because they sit close to several other carcharhinid sharks.",
+    ],
+    lookalikes: ["Spinner shark teeth", "Lemon shark teeth"],
+    factCards: [
+      {
+        id: "blacktip-spin",
+        title: "Leap-and-spin hunter",
+        body: "Blacktips sometimes burst from the water in flashy spins while feeding on fish schools.",
+        icon: "🌪️",
+        mood: "wow",
+      },
+      {
+        id: "blacktip-compare",
+        title: "A subtle ID",
+        body: "This is the kind of tooth where side-by-side comparison really helps because the clues are fine, not flashy.",
+        icon: "🔍",
+        mood: "curiosity",
+      },
+    ],
+  },
+  {
+    id: "great-hammerhead",
+    category: "sharkTooth",
+    sharkName: "Great Hammerhead",
+    commonName: "Great Hammerhead Tooth",
+    scientificName: "Sphyrna mokarran",
+    specimenEmoji: "🔨",
+    ...sharkSpecimenMedia.greatHammerhead,
+    cardPalette: ["#D6EAF4", "#F8FDFF"],
+    summary:
+      "A slanted serrated tooth with a quirky asymmetry that makes hammerhead finds feel extra special.",
+    identifyingFeatures: [
+      "Leaning or slanted crown shape",
+      "Serrated cutting edge",
+      "Asymmetrical look compared with more even triangles",
+    ],
+    colors: ["gray", "charcoal", "tan fossil"],
+    shapeNotes: ["slanted", "asymmetrical", "hooked"],
+    sizeRange: "0.5 to 1.25 inches",
+    regions: ["Atlantic Coast", "Gulf Coast", "Warm fossil sites"],
+    habitat: "Warm coastal and offshore waters, especially around places rich in rays and fish.",
+    era: "Modern species commonly represented by fossil teeth.",
+    toothProfile: {
+      serration: "fine",
+      width: "balanced",
+      curvature: "curved",
+      mouthRegion:
+        "Many teeth from the upper jaw lean noticeably, creating that extra slanted hammerhead personality.",
+      toothUse: "Gripping and cutting prey such as rays and fish.",
+      comparisonTips: [
+        "Look for the slanted crown before looking for size alone",
+        "Hammerhead teeth often feel more tilted and quirky than bull or blacktip teeth",
+      ],
+    },
+    funFacts: [
+      "Great hammerheads use their wide head to help pin prey like stingrays.",
+      "Their angled teeth can look a little mischievous in a collection tray.",
+    ],
+    lookalikes: ["Blacktip shark teeth", "Bonnethead shark teeth"],
+    factCards: [
+      {
+        id: "hammerhead-ray",
+        title: "Ray specialist",
+        body: "Hammerheads are especially well known for hunting stingrays and other flat-bodied prey.",
+        icon: "🌊",
+        mood: "wow",
+      },
+      {
+        id: "hammerhead-tilt",
+        title: "That tilted crown",
+        body: "The slanted shape is one of the most charming clues that you might be holding a hammerhead tooth.",
+        icon: "📏",
         mood: "curiosity",
       },
     ],

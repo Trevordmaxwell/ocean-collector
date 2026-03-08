@@ -24,6 +24,9 @@ function makeCollectionItem(input: {
   notes: string;
   pointsAwarded: number;
   specimenEmoji: string;
+  specimenImageUri?: string;
+  specimenImageSourceUrl?: string;
+  specimenImageCredit?: string;
   cardPalette: [string, string];
   userPhotoUri?: string;
 }): UserCollectionItem {
@@ -40,6 +43,9 @@ function makeCollectionItem(input: {
     pointsAwarded: input.pointsAwarded,
     userPhotoUri: input.userPhotoUri,
     specimenEmoji: input.specimenEmoji,
+    specimenImageUri: input.specimenImageUri,
+    specimenImageSourceUrl: input.specimenImageSourceUrl,
+    specimenImageCredit: input.specimenImageCredit,
     cardPalette: input.cardPalette,
   };
 }
@@ -98,6 +104,9 @@ export const useOceanStore = create<OceanStoreState>()(
             userPhotoUri,
             pointsAwarded: reward.points,
             specimenEmoji: item.specimenEmoji,
+            specimenImageUri: item.specimenImageUri,
+            specimenImageSourceUrl: item.specimenImageSourceUrl,
+            specimenImageCredit: item.specimenImageCredit,
             cardPalette: item.cardPalette,
           }),
           ...state.collection,
@@ -134,7 +143,17 @@ export const useOceanStore = create<OceanStoreState>()(
           }),
         };
       }),
-    addSeaGlassFind: ({ presetId, colorName, size, shape, rarity, location, note, userPhotoUri }) =>
+    addSeaGlassFind: ({
+      presetId,
+      colorName,
+      size,
+      shape,
+      surface,
+      rarity,
+      location,
+      note,
+      userPhotoUri,
+    }) =>
       set((state) => {
         const preset = seaGlassPresets.find((entry) => entry.id === presetId);
         const reward = createRewardTransaction({
@@ -150,6 +169,7 @@ export const useOceanStore = create<OceanStoreState>()(
             colorName,
             size,
             shape,
+            surface,
             rarity,
             location,
             note,
@@ -163,7 +183,7 @@ export const useOceanStore = create<OceanStoreState>()(
           makeCollectionItem({
             category: "seaGlass",
             title: `${colorName} Sea Glass`,
-            subtitle: `${rarity} rarity`,
+            subtitle: `${surface} ${shape} • ${rarity} rarity`,
             location,
             notes: note,
             userPhotoUri,

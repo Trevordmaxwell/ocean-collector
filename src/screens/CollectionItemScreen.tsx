@@ -1,8 +1,9 @@
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { Linking, Pressable, StyleSheet, Text, View } from "react-native";
 
 import { OceanCard } from "../components/OceanCard";
 import { ScreenShell } from "../components/ScreenShell";
 import { SectionTitle } from "../components/SectionTitle";
+import { SpecimenPhoto } from "../components/SpecimenPhoto";
 import { useOceanStore } from "../store/useOceanStore";
 import { palette, radius, spacing, typography } from "../theme";
 import { formatFriendlyDate } from "../utils/format";
@@ -34,7 +35,35 @@ export function CollectionItemScreen({
         <Text style={styles.backButton}>← Back</Text>
       </Pressable>
 
-      <OceanCard title={item.title} subtitle={item.subtitle} icon={item.specimenEmoji} accent={item.cardPalette}>
+      <OceanCard
+        title={item.title}
+        subtitle={item.subtitle}
+        icon={item.specimenEmoji}
+        imageUri={item.specimenImageUri}
+        accent={item.cardPalette}
+      >
+        {item.specimenImageUri ? (
+          <>
+            <SpecimenPhoto
+              title={item.title}
+              imageUri={item.specimenImageUri}
+              emoji={item.specimenEmoji}
+            />
+            {item.specimenImageCredit ? (
+              <Pressable
+                onPress={() => {
+                  if (item.specimenImageSourceUrl) {
+                    Linking.openURL(item.specimenImageSourceUrl).catch(() => undefined);
+                  }
+                }}
+              >
+                <Text style={styles.photoCredit}>
+                  Guide photo via Wikimedia Commons • {item.specimenImageCredit}
+                </Text>
+              </Pressable>
+            ) : null}
+          </>
+        ) : null}
         <Text style={styles.detailLine}>Found: {formatFriendlyDate(item.foundDate)}</Text>
         <Text style={styles.detailLine}>Location: {item.location}</Text>
         <Text style={styles.detailLine}>Points earned: +{item.pointsAwarded}</Text>
@@ -66,6 +95,12 @@ const styles = StyleSheet.create({
     color: palette.deep,
     fontSize: 15,
     lineHeight: 22,
+  },
+  photoCredit: {
+    fontFamily: typography.body,
+    color: palette.mist,
+    fontSize: 12,
+    lineHeight: 18,
   },
   favoriteButton: {
     alignItems: "center",

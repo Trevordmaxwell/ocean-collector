@@ -22,6 +22,7 @@ export function FactsScreen() {
           title={item.commonName}
           subtitle={item.funFacts[0]}
           icon={item.specimenEmoji}
+          imageUri={item.specimenImageUri}
           accent={item.cardPalette}
         />
       ))}
@@ -33,6 +34,7 @@ export function FactsScreen() {
           title={item.commonName}
           subtitle={item.funFacts[0]}
           icon={item.specimenEmoji}
+          imageUri={item.specimenImageUri}
           accent={item.cardPalette}
         />
       ))}

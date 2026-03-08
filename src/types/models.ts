@@ -36,13 +36,24 @@ export interface BaseLibraryItem {
   funFacts: string[];
   lookalikes: string[];
   specimenEmoji: string;
+  specimenImageUri?: string;
+  specimenImageSourceUrl?: string;
+  specimenImageCredit?: string;
   cardPalette: [string, string];
   factCards: FactCard[];
 }
 
 export interface ShellSpecies extends BaseLibraryItem {
   category: "shell";
-  shellType: "spiral" | "scallop" | "clam" | "whelk" | "olive";
+  shellType:
+    | "spiral"
+    | "scallop"
+    | "clam"
+    | "whelk"
+    | "olive"
+    | "conch"
+    | "bonnet"
+    | "ark";
   inhabitantInfo: string;
 }
 
@@ -85,6 +96,7 @@ export interface SeaGlassEntry {
   colorName: string;
   size: "tiny" | "small" | "medium" | "large";
   shape: "rounded" | "jagged" | "gem" | "chunky";
+  surface: "flat" | "curved";
   rarity: SeaGlassPreset["rarity"];
   foundDate: string;
   location: string;
@@ -151,6 +163,9 @@ export interface UserCollectionItem {
   pointsAwarded: number;
   userPhotoUri?: string;
   specimenEmoji: string;
+  specimenImageUri?: string;
+  specimenImageSourceUrl?: string;
+  specimenImageCredit?: string;
   cardPalette: [string, string];
 }
 

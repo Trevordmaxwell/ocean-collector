@@ -1,12 +1,14 @@
 import { LinearGradient } from "expo-linear-gradient";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 
+import { SpecimenBadge } from "./SpecimenBadge";
 import { palette, radius, shadows, spacing, typography } from "../theme";
 
 interface FindTileProps {
   title: string;
   subtitle: string;
-  emoji: string;
+  emoji?: string;
+  imageUri?: string;
   palettePair: [string, string];
   detail?: string;
   onPress?: () => void;
@@ -17,6 +19,7 @@ export function FindTile({
   title,
   subtitle,
   emoji,
+  imageUri,
   palettePair,
   detail,
   onPress,
@@ -25,9 +28,7 @@ export function FindTile({
   return (
     <Pressable onPress={onPress} style={styles.wrap}>
       <LinearGradient colors={palettePair} style={styles.tile}>
-        <View style={styles.emojiBubble}>
-          <Text style={styles.emoji}>{emoji}</Text>
-        </View>
+        <SpecimenBadge emoji={emoji} imageUri={imageUri} size={58} />
         <View style={styles.copy}>
           <Text style={styles.title}>{title}</Text>
           <Text style={styles.subtitle}>{subtitle}</Text>
@@ -52,17 +53,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: palette.border,
     ...shadows.soft,
-  },
-  emojiBubble: {
-    width: 56,
-    height: 56,
-    borderRadius: 28,
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: "rgba(255,255,255,0.58)",
-  },
-  emoji: {
-    fontSize: 28,
   },
   copy: {
     flex: 1,

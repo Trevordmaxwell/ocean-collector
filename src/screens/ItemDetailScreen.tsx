@@ -1,9 +1,10 @@
-import { Alert, Pressable, StyleSheet, Text, View } from "react-native";
+import { Alert, Linking, Pressable, StyleSheet, Text, View } from "react-native";
 
 import { Chip } from "../components/Chip";
 import { OceanCard } from "../components/OceanCard";
 import { ScreenShell } from "../components/ScreenShell";
 import { SectionTitle } from "../components/SectionTitle";
+import { SpecimenPhoto } from "../components/SpecimenPhoto";
 import { getLibraryItem } from "../data/library";
 import { useOceanStore } from "../store/useOceanStore";
 import { gradients, palette, radius, spacing, typography } from "../theme";
@@ -38,9 +39,28 @@ export function ItemDetailScreen({ navigation, route }: RootScreenProps<"ItemDet
         title={item.commonName}
         subtitle={item.scientificName ?? item.summary}
         icon={item.specimenEmoji}
+        imageUri={item.specimenImageUri}
         accent={item.cardPalette}
       >
         <Text style={styles.summary}>{item.summary}</Text>
+        <SpecimenPhoto
+          title={item.commonName}
+          imageUri={item.specimenImageUri}
+          emoji={item.specimenEmoji}
+        />
+        {item.specimenImageCredit ? (
+          <Pressable
+            onPress={() => {
+              if (item.specimenImageSourceUrl) {
+                Linking.openURL(item.specimenImageSourceUrl).catch(() => undefined);
+              }
+            }}
+          >
+            <Text style={styles.photoCredit}>
+              Specimen photo via Wikimedia Commons • {item.specimenImageCredit}
+            </Text>
+          </Pressable>
+        ) : null}
         <View style={styles.chipRow}>
           {item.colors.map((color) => (
             <Chip key={color} label={color} />
@@ -123,6 +143,12 @@ const styles = StyleSheet.create({
     color: palette.deep,
     fontSize: 15,
     lineHeight: 22,
+  },
+  photoCredit: {
+    fontFamily: typography.body,
+    color: palette.mist,
+    fontSize: 12,
+    lineHeight: 18,
   },
   chipRow: {
     flexDirection: "row",

@@ -9,12 +9,14 @@ import {
   type ViewStyle,
 } from "react-native";
 
+import { SpecimenBadge } from "./SpecimenBadge";
 import { palette, radius, shadows, spacing, typography } from "../theme";
 
 interface OceanCardProps extends PropsWithChildren {
   title?: string;
   subtitle?: string;
   icon?: string;
+  imageUri?: string;
   accent?: readonly [string, string, ...string[]];
   onPress?: () => void;
   style?: StyleProp<ViewStyle>;
@@ -24,6 +26,7 @@ export function OceanCard({
   title,
   subtitle,
   icon,
+  imageUri,
   accent,
   onPress,
   style,
@@ -40,7 +43,7 @@ export function OceanCard({
             {title ? <Text style={styles.title}>{title}</Text> : null}
             {subtitle ? <Text style={styles.subtitle}>{subtitle}</Text> : null}
           </View>
-          {icon ? <Text style={styles.icon}>{icon}</Text> : null}
+          {imageUri || icon ? <SpecimenBadge emoji={icon} imageUri={imageUri} size={60} /> : null}
         </View>
       )}
       {children}
@@ -87,8 +90,5 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: palette.mist,
     lineHeight: 20,
-  },
-  icon: {
-    fontSize: 28,
   },
 });

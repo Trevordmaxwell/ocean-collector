@@ -12,11 +12,13 @@ import type { RootScreenProps } from "../navigation/types";
 
 const sizes = ["tiny", "small", "medium", "large"] as const;
 const shapes = ["rounded", "jagged", "gem", "chunky"] as const;
+const surfaces = ["flat", "curved"] as const;
 
 export function AddSeaGlassScreen({ navigation }: RootScreenProps<"AddSeaGlass">) {
   const [selectedPresetId, setSelectedPresetId] = useState(seaGlassPresets[0]!.id);
   const [size, setSize] = useState<(typeof sizes)[number]>("small");
   const [shape, setShape] = useState<(typeof shapes)[number]>("rounded");
+  const [surface, setSurface] = useState<(typeof surfaces)[number]>("flat");
   const [location, setLocation] = useState("");
   const [note, setNote] = useState("");
   const addSeaGlassFind = useOceanStore((state) => state.addSeaGlassFind);
@@ -79,6 +81,22 @@ export function AddSeaGlassScreen({ navigation }: RootScreenProps<"AddSeaGlass">
           ))}
         </View>
 
+        <Text style={styles.label}>Flat or curved?</Text>
+        <View style={styles.choiceWrap}>
+          {surfaces.map((entry) => (
+            <Chip
+              key={entry}
+              label={entry}
+              active={entry === surface}
+              onPress={() => setSurface(entry)}
+            />
+          ))}
+        </View>
+
+        <Text style={styles.helper}>
+          Flat pieces often come from bottle walls, while curved ones can feel like little rim or neck treasures.
+        </Text>
+
         <Text style={styles.label}>Where did you find it?</Text>
         <TextInput
           placeholder="Jetty edge, tide pool, shell line..."
@@ -106,6 +124,7 @@ export function AddSeaGlassScreen({ navigation }: RootScreenProps<"AddSeaGlass">
               rarity: preset.rarity,
               size,
               shape,
+              surface,
               location: location || "Beach wander",
               note,
             });

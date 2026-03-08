@@ -1,4 +1,5 @@
 import type { ShellSpecies } from "../types/models";
+import { shellSpecimenMedia } from "./specimenMedia";
 
 export const shellSpecies: ShellSpecies[] = [
   {
@@ -8,6 +9,7 @@ export const shellSpecies: ShellSpecies[] = [
     scientificName: "Oliva sayana",
     shellType: "olive",
     specimenEmoji: "🐚",
+    ...shellSpecimenMedia.letteredOlive,
     cardPalette: ["#F6D3C0", "#FFF3E6"],
     summary:
       "A glossy beach treasure with caramel scribbles that look hand-painted.",
@@ -52,6 +54,7 @@ export const shellSpecies: ShellSpecies[] = [
     scientificName: "Argopecten gibbus",
     shellType: "scallop",
     specimenEmoji: "🌸",
+    ...shellSpecimenMedia.calicoScallop,
     cardPalette: ["#F7CDD8", "#FFF5F8"],
     summary:
       "A fan-shaped scallop with ribs and painterly pink, peach, or coral patches.",
@@ -96,6 +99,7 @@ export const shellSpecies: ShellSpecies[] = [
     scientificName: "Sinistrofulgur sinistrum",
     shellType: "whelk",
     specimenEmoji: "⚡",
+    ...shellSpecimenMedia.lightningWhelk,
     cardPalette: ["#F4C79B", "#F9F2DF"],
     summary:
       "A large spiral shell famous for a dramatic left-handed opening and zigzag lightning marks.",
@@ -140,6 +144,7 @@ export const shellSpecies: ShellSpecies[] = [
     scientificName: "Neverita duplicata",
     shellType: "spiral",
     specimenEmoji: "🌙",
+    ...shellSpecimenMedia.moonSnail,
     cardPalette: ["#FBE7BE", "#FFF8EA"],
     summary: "Rounded, almost bubble-like shell with a soft swirl and buttery tones.",
     identifyingFeatures: [
@@ -183,6 +188,7 @@ export const shellSpecies: ShellSpecies[] = [
     scientificName: "Donax variabilis",
     shellType: "clam",
     specimenEmoji: "🪸",
+    ...shellSpecimenMedia.coquinaClam,
     cardPalette: ["#F9D8A8", "#FFF0D8"],
     summary:
       "A tiny triangular clam shell famous for candy-like colors along the surf line.",
@@ -227,6 +233,7 @@ export const shellSpecies: ShellSpecies[] = [
     scientificName: "Dinocardium robustum",
     shellType: "clam",
     specimenEmoji: "💗",
+    ...shellSpecimenMedia.atlanticCockle,
     cardPalette: ["#F4C7C5", "#FEF2F2"],
     summary:
       "A sturdy heart-shaped shell with bold ribs and sweet pink, peach, or cream tones.",
@@ -260,6 +267,186 @@ export const shellSpecies: ShellSpecies[] = [
         title: "Built for waves",
         body: "Deep ribs add strength, helping the shell survive lots of beach tumbling.",
         icon: "🛟",
+        mood: "curiosity",
+      },
+    ],
+  },
+  {
+    id: "turkey-wing",
+    category: "shell",
+    commonName: "Turkey Wing",
+    scientificName: "Arca zebra",
+    shellType: "ark",
+    specimenEmoji: "🪶",
+    ...shellSpecimenMedia.turkeyWing,
+    cardPalette: ["#D6C6B8", "#FAF4EE"],
+    summary:
+      "A striped ark shell with dark feathery bands that really do look like a little turkey wing.",
+    identifyingFeatures: [
+      "Elongated clam shell with bold ribs",
+      "Dark brown striping over a pale shell",
+      "Wing-like outline instead of a neat fan or heart",
+    ],
+    colors: ["cream", "chestnut", "charcoal"],
+    shapeNotes: ["elongated", "ribbed", "wing-like"],
+    sizeRange: "2 to 4 inches",
+    regions: ["Atlantic Coast", "Gulf Coast"],
+    habitat: "Warm shallow coastal waters, often around sand, shell beds, and grass.",
+    inhabitantInfo:
+      "This bivalve lived in two striped halves connected by a hinge and protected a soft-bodied clam inside.",
+    funFacts: [
+      "Turkey wing shells are a favorite display find because their stripes look so graphic and dramatic.",
+      "Beachcombers often find single halves, but matching pairs feel especially lucky.",
+    ],
+    lookalikes: ["Other ark shells", "Dark cockle fragments"],
+    factCards: [
+      {
+        id: "turkey-wing-pattern",
+        title: "Nature-made stripes",
+        body: "Those dark bands are one reason turkey wings feel almost illustrated already.",
+        icon: "🎨",
+        mood: "wow",
+      },
+      {
+        id: "turkey-wing-ribs",
+        title: "Feel the ribs",
+        body: "The sturdy raised ribs help separate turkey wings from flatter striped shell fragments.",
+        icon: "🌀",
+        mood: "curiosity",
+      },
+    ],
+  },
+  {
+    id: "scotch-bonnet",
+    category: "shell",
+    commonName: "Scotch Bonnet",
+    scientificName: "Semicassis granulata",
+    shellType: "bonnet",
+    specimenEmoji: "🎀",
+    ...shellSpecimenMedia.scotchBonnet,
+    cardPalette: ["#F3D4B2", "#FFF6E9"],
+    summary:
+      "A rounded spotted shell with warm caramel freckles and a storybook bonnet look.",
+    identifyingFeatures: [
+      "Rounded helmet-like shell with a short spire",
+      "Rows of orange or brown spots over a pale base",
+      "Wide opening with a softly flared lip",
+    ],
+    colors: ["cream", "apricot", "caramel"],
+    shapeNotes: ["rounded", "domed", "spotted"],
+    sizeRange: "2 to 4 inches",
+    regions: ["Southeast Atlantic", "Gulf Coast"],
+    habitat: "Sandy offshore bottoms and shell-rich coastal waters.",
+    inhabitantInfo:
+      "A sea snail lived inside this shell and cruised the bottom looking for other invertebrates to eat.",
+    funFacts: [
+      "The Scotch bonnet is the state shell of North Carolina.",
+      "Its cozy spotted shape is one reason collectors think it looks extra whimsical.",
+    ],
+    lookalikes: ["Helmet shells", "Young conchs"],
+    factCards: [
+      {
+        id: "bonnet-state",
+        title: "State shell fame",
+        body: "North Carolina chose the Scotch bonnet as its state shell because it is such a beloved coastal find.",
+        icon: "⭐",
+        mood: "wow",
+      },
+      {
+        id: "bonnet-name",
+        title: "Why that name?",
+        body: "People thought the shell looked a bit like the rounded knitted bonnets once worn in Scotland.",
+        icon: "🧶",
+        mood: "curiosity",
+      },
+    ],
+  },
+  {
+    id: "florida-fighting-conch",
+    category: "shell",
+    commonName: "Florida Fighting Conch",
+    scientificName: "Strombus alatus",
+    shellType: "conch",
+    specimenEmoji: "🩰",
+    ...shellSpecimenMedia.floridaFightingConch,
+    cardPalette: ["#F9CDB4", "#FFF3EA"],
+    summary:
+      "A peachy spiral shell with a flared lip and a lively look that feels very Florida-beach magic.",
+    identifyingFeatures: [
+      "Sturdy spiral shell with a pointed spire",
+      "Adult shells show a flared outer lip",
+      "Opening often glows peach, coral, or rosy orange",
+    ],
+    colors: ["tan", "peach", "rose", "cream"],
+    shapeNotes: ["spiral", "flared", "sturdy"],
+    sizeRange: "2 to 4 inches",
+    regions: ["Gulf Coast", "South Atlantic"],
+    habitat: "Shallow sandy flats and seagrass beds in warm water.",
+    inhabitantInfo:
+      "A conch lived inside and used a pointed operculum like a little pole to hop across the bottom.",
+    funFacts: [
+      "Living conchs can move in surprising little hops instead of only sliding.",
+      "The pretty flared lip becomes more obvious as the shell reaches adulthood.",
+    ],
+    lookalikes: ["Crown conch", "Juvenile horse conch"],
+    factCards: [
+      {
+        id: "conch-hop",
+        title: "Tiny hopper",
+        body: "Conchs can use part of their foot and operculum to vault themselves along the seafloor.",
+        icon: "💨",
+        mood: "wow",
+      },
+      {
+        id: "conch-lip",
+        title: "That flared lip",
+        body: "The flared lip is one of the easiest clues that you are holding a conch-style shell.",
+        icon: "🌺",
+        mood: "curiosity",
+      },
+    ],
+  },
+  {
+    id: "angel-wing",
+    category: "shell",
+    commonName: "Angel Wing",
+    scientificName: "Cyrtopleura costata",
+    shellType: "clam",
+    specimenEmoji: "🪽",
+    ...shellSpecimenMedia.angelWing,
+    cardPalette: ["#E8EEF3", "#FCFEFF"],
+    summary:
+      "A delicate white shell with wingy ridges that feels pearly, airy, and almost too pretty to be real.",
+    identifyingFeatures: [
+      "Thin elongated shell with a soft wing shape",
+      "Raised ribs or spines along the surface",
+      "Usually pale white or ivory and quite fragile",
+    ],
+    colors: ["ivory", "white", "pearl"],
+    shapeNotes: ["wing-like", "fragile", "elongated"],
+    sizeRange: "3 to 6 inches",
+    regions: ["Atlantic Coast", "Gulf Coast"],
+    habitat: "Protected coastal areas with soft sediment where the clam could burrow deeply.",
+    inhabitantInfo:
+      "Angel wings are bivalves, and the living clam spent much of its time buried with only part of the shell exposed.",
+    funFacts: [
+      "Complete angel wing shells feel extra special because they break so easily in rough surf.",
+      "Their airy shape is a big reason beachcombers give them such dreamy names.",
+    ],
+    lookalikes: ["Pen shell fragments", "Thin ark shell pieces"],
+    factCards: [
+      {
+        id: "angel-fragile",
+        title: "Handle gently",
+        body: "Angel wings are usually thin and delicate, so even finding a large fragment can feel lucky.",
+        icon: "🤍",
+        mood: "wow",
+      },
+      {
+        id: "angel-burrow",
+        title: "Buried life",
+        body: "The clam that made this shell liked soft bottom habitats where it could stay tucked away.",
+        icon: "🏖️",
         mood: "curiosity",
       },
     ],

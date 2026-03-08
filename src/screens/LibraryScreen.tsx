@@ -95,12 +95,13 @@ export function LibraryScreen({ navigation, route }: RootScreenProps<"Library">)
             title={item.commonName}
             subtitle={item.scientificName ?? item.summary}
             emoji={item.specimenEmoji}
-              palettePair={item.cardPalette}
-              detail={item.summary}
-              trailingLabel={"shellType" in item ? item.shellType : item.toothProfile.serration}
-              onPress={() => navigation.navigate("ItemDetail", { category, id: item.id })}
-            />
-          ))}
+            imageUri={item.specimenImageUri}
+            palettePair={item.cardPalette}
+            detail={item.summary}
+            trailingLabel={"shellType" in item ? item.shellType : item.toothProfile.serration}
+            onPress={() => navigation.navigate("ItemDetail", { category, id: item.id })}
+          />
+        ))}
       </View>
 
       {items.length > 0 ? (
