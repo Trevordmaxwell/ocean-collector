@@ -1,6 +1,14 @@
 import { LinearGradient } from "expo-linear-gradient";
-import type { PropsWithChildren } from "react";
-import { ScrollView, StyleSheet, View, type StyleProp, type ViewStyle } from "react-native";
+import { useRef, type PropsWithChildren } from "react";
+import { useFocusEffect } from "@react-navigation/native";
+import {
+  Platform,
+  ScrollView,
+  StyleSheet,
+  View,
+  type StyleProp,
+  type ViewStyle,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import { gradients, palette, spacing } from "../theme";
@@ -15,8 +23,24 @@ export function ScreenShell({
   scroll = true,
   contentContainerStyle,
 }: ScreenShellProps) {
+  const scrollRef = useRef<ScrollView | null>(null);
+
+  useFocusEffect(() => {
+    if (!scroll) {
+      return;
+    }
+
+    requestAnimationFrame(() => {
+      if (Platform.OS === "web") {
+        window.scrollTo(0, 0);
+      }
+      scrollRef.current?.scrollTo({ y: 0, animated: false });
+    });
+  });
+
   const content = scroll ? (
     <ScrollView
+      ref={scrollRef}
       showsVerticalScrollIndicator={false}
       contentContainerStyle={[styles.scrollContent, contentContainerStyle]}
     >

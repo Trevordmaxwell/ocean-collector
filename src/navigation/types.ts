@@ -9,7 +9,7 @@ export type RootStackParamList = {
   Welcome: undefined;
   MainTabs: NavigatorScreenParams<MainTabParamList> | undefined;
   Identify: { category: LibraryCategory };
-  Library: { category: LibraryCategory };
+  Library: { category: LibraryCategory; initialQuery?: string };
   ItemDetail: { category: LibraryCategory; id: string };
   AddSeaGlass: undefined;
   AddTrash: undefined;

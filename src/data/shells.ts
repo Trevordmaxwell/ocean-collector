@@ -1,7 +1,8 @@
 import type { ShellSpecies } from "../types/models";
 import { shellSpecimenMedia } from "./specimenMedia";
+import { shellSpeciesExpansion } from "./shellsExpansion";
 
-export const shellSpecies: ShellSpecies[] = [
+const coreShellSpecies: ShellSpecies[] = [
   {
     id: "lettered-olive",
     category: "shell",
@@ -452,3 +453,5 @@ export const shellSpecies: ShellSpecies[] = [
     ],
   },
 ];
+
+export const shellSpecies: ShellSpecies[] = [...coreShellSpecies, ...shellSpeciesExpansion];

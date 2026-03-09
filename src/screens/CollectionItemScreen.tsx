@@ -72,6 +72,19 @@ export function CollectionItemScreen({
         <Text style={styles.detailLine}>Location: {item.location}</Text>
         <Text style={styles.detailLine}>Points earned: +{item.pointsAwarded}</Text>
         <Text style={styles.detailLine}>Favorite: {item.favorite ? "Yes" : "Not yet"}</Text>
+        {item.referenceId && (item.category === "shell" || item.category === "sharkTooth") ? (
+          <Pressable
+            onPress={() =>
+              navigation.navigate("ItemDetail", {
+                category: item.category === "shell" ? "shell" : "sharkTooth",
+                id: item.referenceId!,
+              })
+            }
+            style={styles.guideButton}
+          >
+            <Text style={styles.guideButtonLabel}>Open original guide card</Text>
+          </Pressable>
+        ) : null}
         <Pressable onPress={() => toggleFavorite(item.id)} style={styles.favoriteButton}>
           <Text style={styles.favoriteButtonLabel}>
             {item.favorite ? "Remove favorite star" : "Mark as favorite"}
@@ -112,6 +125,20 @@ const styles = StyleSheet.create({
     borderRadius: radius.pill,
     paddingVertical: spacing.sm + 2,
     backgroundColor: palette.deep,
+  },
+  guideButton: {
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: radius.pill,
+    paddingVertical: spacing.sm + 2,
+    backgroundColor: "rgba(255,255,255,0.78)",
+    borderWidth: 1,
+    borderColor: palette.border,
+  },
+  guideButtonLabel: {
+    fontFamily: typography.bodyBold,
+    fontSize: 15,
+    color: palette.deep,
   },
   favoriteButtonLabel: {
     fontFamily: typography.headingSoft,

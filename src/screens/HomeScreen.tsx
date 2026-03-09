@@ -5,7 +5,12 @@ import { OceanCard } from "../components/OceanCard";
 import { ScreenShell } from "../components/ScreenShell";
 import { SectionTitle } from "../components/SectionTitle";
 import { StatPill } from "../components/StatPill";
-import { beachFactCards } from "../data";
+import { beachFactCards, treasureShopItems } from "../data";
+import {
+  getAvailablePoints,
+  getEquippedTheme,
+  getQuestProgresses,
+} from "../services/progression";
 import { rewardBadges } from "../services/rewardEngine";
 import { useOceanStore } from "../store/useOceanStore";
 import { gradients, palette, radius, spacing, typography } from "../theme";
@@ -57,14 +62,31 @@ const actionCards = [
 ];
 
 export function HomeScreen({ navigation }: TabScreenProps<"Home">) {
-  const totalPoints = useOceanStore((state) => state.points.total);
-  const level = useOceanStore((state) => state.points.level);
+  const points = useOceanStore((state) => state.points);
   const collection = useOceanStore((state) => state.collection);
   const trashEntries = useOceanStore((state) => state.trashEntries);
   const unlockedBadgeIds = useOceanStore((state) => state.unlockedBadgeIds);
+  const claimedQuestIds = useOceanStore((state) => state.claimedQuestIds);
+  const purchasedShopItemIds = useOceanStore((state) => state.purchasedShopItemIds);
+  const equippedThemeId = useOceanStore((state) => state.equippedThemeId);
 
   const cleanupPieces = trashEntries.reduce((total, entry) => total + entry.count, 0);
   const latestBadge = rewardBadges.find((badge) => unlockedBadgeIds.includes(badge.id));
+  const availablePoints = getAvailablePoints(points);
+  const activeTheme = getEquippedTheme(purchasedShopItemIds, equippedThemeId);
+  const heroAccent = activeTheme?.previewGradient ?? gradients.hero;
+  const questProgresses = getQuestProgresses({
+    collection,
+    trashEntries,
+    claimedQuestIds,
+  });
+  const featuredQuests = questProgresses.slice(0, 3);
+  const claimableCount = questProgresses.filter(
+    (entry) => entry.progress >= entry.target && !entry.claimed,
+  ).length;
+  const nextShopItem = treasureShopItems.find(
+    (item) => !purchasedShopItemIds.includes(item.id),
+  );
 
   function openAction(actionLabel: string) {
     switch (actionLabel) {
@@ -95,14 +117,15 @@ export function HomeScreen({ navigation }: TabScreenProps<"Home">) {
 
       <OceanCard
         title="Welcome back, tide explorer"
-        subtitle="Cute beach journaling with points, facts, and treasure-card vibes."
+        subtitle="Cute beach journaling with points, quests, and treasure-shop vibes."
         icon="🌊"
-        accent={gradients.hero}
+        accent={heroAccent}
       >
         <View style={styles.statRow}>
-          <StatPill label="Points" value={`${totalPoints}`} />
-          <StatPill label="Level" value={`${level}`} />
-          <StatPill label="Finds" value={`${collection.length}`} />
+          <StatPill label="Total" value={`${points.total}`} />
+          <StatPill label="Available" value={`${availablePoints}`} />
+          <StatPill label="Level" value={`${points.level}`} />
+          <StatPill label="Streak" value={`${points.streakDays}d`} />
         </View>
 
         <View style={styles.heroFooter}>
@@ -112,6 +135,10 @@ export function HomeScreen({ navigation }: TabScreenProps<"Home">) {
           <Text style={styles.heroFooterText}>
             Latest badge:{" "}
             <Text style={styles.heroFooterBold}>{latestBadge?.title ?? "Almost there"}</Text>
+          </Text>
+          <Text style={styles.heroFooterText}>
+            Equipped theme:{" "}
+            <Text style={styles.heroFooterBold}>{activeTheme?.title ?? "Classic shellbook"}</Text>
           </Text>
         </View>
       </OceanCard>
@@ -135,6 +162,54 @@ export function HomeScreen({ navigation }: TabScreenProps<"Home">) {
       </View>
 
       <SectionTitle
+        title="Today's Quests"
+        subtitle={
+          claimableCount > 0
+            ? `${claimableCount} reward${claimableCount === 1 ? "" : "s"} ready to claim.`
+            : "Small goals to keep the collecting loop lively."
+        }
+        actionLabel="Open rewards"
+        onPressAction={() => navigation.navigate("Rewards")}
+      />
+      <View style={styles.questList}>
+        {featuredQuests.map((entry) => (
+          <OceanCard
+            key={entry.quest.id}
+            title={`${entry.quest.icon} ${entry.quest.title}`}
+            subtitle={entry.quest.description}
+            accent={entry.quest.accent}
+          >
+            <Text style={styles.questLine}>
+              {entry.progress}/{entry.target} complete • +{entry.quest.rewardPoints} pts
+            </Text>
+            <Text style={styles.questSubtle}>
+              {entry.claimed ? "Claimed for this cycle" : `${entry.quest.cadence} quest`}
+            </Text>
+          </OceanCard>
+        ))}
+      </View>
+
+      {nextShopItem ? (
+        <>
+          <SectionTitle
+            title="Treasure Shop Peek"
+            subtitle="Spend points on cute unlocks and future cosmetic goodies."
+            actionLabel="Visit shop"
+            onPressAction={() => navigation.navigate("Rewards")}
+          />
+          <FindTile
+            title={nextShopItem.title}
+            subtitle={`${nextShopItem.cost} pts • ${nextShopItem.category}`}
+            emoji={nextShopItem.icon}
+            palettePair={nextShopItem.accent}
+            detail={nextShopItem.perk}
+            trailingLabel={availablePoints >= nextShopItem.cost ? "Ready" : "Save up"}
+            onPress={() => navigation.navigate("Rewards")}
+          />
+        </>
+      ) : null}
+
+      <SectionTitle
         title="Collection Shortcuts"
         subtitle="Jump straight to your saved treasures, badges, and fun facts."
       />
@@ -146,7 +221,7 @@ export function HomeScreen({ navigation }: TabScreenProps<"Home">) {
         </Pressable>
         <Pressable onPress={() => navigation.navigate("Rewards")} style={styles.quickButton}>
           <Text style={styles.quickEmoji}>🏅</Text>
-          <Text style={styles.quickLabel}>Rewards</Text>
+          <Text style={styles.quickLabel}>Rewards + Shop</Text>
         </Pressable>
         <Pressable onPress={() => navigation.navigate("Facts")} style={styles.quickButton}>
           <Text style={styles.quickEmoji}>🫧</Text>
@@ -190,6 +265,19 @@ const styles = StyleSheet.create({
   },
   actionList: {
     gap: spacing.sm,
+  },
+  questList: {
+    gap: spacing.sm,
+  },
+  questLine: {
+    fontFamily: typography.bodyBold,
+    color: palette.deep,
+    fontSize: 14,
+  },
+  questSubtle: {
+    fontFamily: typography.body,
+    color: palette.mist,
+    fontSize: 13,
   },
   quickRow: {
     flexDirection: "row",

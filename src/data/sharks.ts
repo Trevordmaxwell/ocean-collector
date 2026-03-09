@@ -1,7 +1,8 @@
 import type { SharkSpecies } from "../types/models";
 import { sharkSpecimenMedia } from "./specimenMedia";
+import { sharkSpeciesExpansion } from "./sharksExpansion";
 
-export const sharkSpecies: SharkSpecies[] = [
+const coreSharkSpecies: SharkSpecies[] = [
   {
     id: "sand-tiger",
     category: "sharkTooth",
@@ -451,3 +452,5 @@ export const sharkSpecies: SharkSpecies[] = [
     ],
   },
 ];
+
+export const sharkSpecies: SharkSpecies[] = [...coreSharkSpecies, ...sharkSpeciesExpansion];

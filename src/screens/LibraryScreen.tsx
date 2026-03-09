@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Pressable, ScrollView, StyleSheet, Text, TextInput, View } from "react-native";
 
 import { Chip } from "../components/Chip";
@@ -23,10 +23,14 @@ function getFilterOptions(category: LibraryCategory) {
 }
 
 export function LibraryScreen({ navigation, route }: RootScreenProps<"Library">) {
-  const { category } = route.params;
+  const { category, initialQuery } = route.params;
   const saveIdentifiedFind = useOceanStore((state) => state.saveIdentifiedFind);
-  const [query, setQuery] = useState("");
+  const [query, setQuery] = useState(initialQuery ?? "");
   const [activeFilter, setActiveFilter] = useState("All");
+
+  useEffect(() => {
+    setQuery(initialQuery ?? "");
+  }, [initialQuery]);
 
   const items =
     category === "shell"

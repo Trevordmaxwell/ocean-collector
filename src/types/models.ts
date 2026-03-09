@@ -9,12 +9,23 @@ export type BadgeRuleKind =
   | "sharkTooth"
   | "seaGlass"
   | "trash";
+export type QuestCadence = "daily" | "weekly";
+export type QuestRuleKind =
+  | "finds"
+  | "shell"
+  | "sharkTooth"
+  | "seaGlass"
+  | "trash"
+  | "favorites";
+export type ShopCategory = "journalTheme" | "stickerPack" | "frame" | "wallpaper";
 export type RewardAction =
   | "identify_shell"
   | "identify_shark_tooth"
   | "log_sea_glass"
   | "log_trash"
-  | "save_manual_guide";
+  | "save_manual_guide"
+  | "claim_quest"
+  | "redeem_shop_item";
 
 export interface FactCard {
   id: string;
@@ -129,8 +140,10 @@ export interface RewardTransaction {
 
 export interface UserPoints {
   total: number;
+  spent: number;
   level: number;
   streakDays: number;
+  lastActivityDate?: string;
   transactions: RewardTransaction[];
 }
 
@@ -142,6 +155,38 @@ export interface RewardBadge {
   accent: [string, string];
   ruleKind: BadgeRuleKind;
   threshold: number;
+}
+
+export interface RewardQuest {
+  id: string;
+  title: string;
+  description: string;
+  icon: string;
+  accent: [string, string];
+  cadence: QuestCadence;
+  rewardPoints: number;
+  ruleKind: QuestRuleKind;
+  target: number;
+}
+
+export interface QuestProgress {
+  quest: RewardQuest;
+  progress: number;
+  target: number;
+  cycleKey: string;
+  claimed: boolean;
+}
+
+export interface ShopItem {
+  id: string;
+  title: string;
+  description: string;
+  icon: string;
+  accent: [string, string];
+  cost: number;
+  category: ShopCategory;
+  perk: string;
+  previewGradient?: [string, string, string];
 }
 
 export interface MilestoneCelebration {
@@ -205,6 +250,9 @@ export interface OceanStoreState {
   findLogs: FindLog[];
   points: UserPoints;
   unlockedBadgeIds: string[];
+  claimedQuestIds: string[];
+  purchasedShopItemIds: string[];
+  equippedThemeId?: string;
   pendingCelebration: MilestoneCelebration | null;
   markWelcomeSeen: () => void;
   saveIdentifiedFind: (input: {
@@ -219,6 +267,9 @@ export interface OceanStoreState {
   addTrashPickup: (
     input: Omit<TrashEntry, "id" | "foundDate" | "label">,
   ) => MilestoneCelebration | null;
+  claimQuest: (questId: string) => { ok: boolean; message: string };
+  purchaseShopItem: (itemId: string) => { ok: boolean; message: string };
+  equipTheme: (itemId: string) => void;
   toggleFavorite: (itemId: string) => void;
   dismissCelebration: () => void;
 }

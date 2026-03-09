@@ -1,6 +1,17 @@
 import { create } from "zustand";
 
-import { seaGlassPresets, sharkSpecies, shellSpecies, trashCategories } from "../data";
+import {
+  seaGlassPresets,
+  sharkSpecies,
+  shellSpecies,
+  trashCategories,
+  treasureShopItems,
+} from "../data";
+import {
+  getAvailablePoints,
+  getQuestProgresses,
+  getUpdatedActivityState,
+} from "../services/progression";
 import {
   createId,
   createRewardTransaction,
@@ -54,18 +65,23 @@ function makeCollectionItem(input: {
 }
 
 export const useOceanStore = create<OceanStoreState>()(
-  (set) => ({
+  (set, get) => ({
     hasSeenWelcome: false,
     collection: [],
     seaGlassEntries: [],
     trashEntries: [],
     findLogs: [],
     unlockedBadgeIds: [],
+    claimedQuestIds: [],
+    purchasedShopItemIds: [],
+    equippedThemeId: undefined,
     pendingCelebration: null,
     points: {
       total: 0,
+      spent: 0,
       level: 1,
       streakDays: 1,
+      lastActivityDate: undefined,
       transactions: [],
     },
     markWelcomeSeen: () => set({ hasSeenWelcome: true }),
@@ -118,6 +134,7 @@ export const useOceanStore = create<OceanStoreState>()(
         ];
 
         const nextTotal = state.points.total + reward.points;
+        const activityState = getUpdatedActivityState(state.points, reward.createdAt);
 
         return {
           collection: nextCollection,
@@ -134,8 +151,10 @@ export const useOceanStore = create<OceanStoreState>()(
           ],
           points: {
             total: nextTotal,
+            spent: state.points.spent,
             level: getLevelFromPoints(nextTotal),
-            streakDays: state.points.streakDays,
+            streakDays: activityState.streakDays,
+            lastActivityDate: activityState.lastActivityDate,
             transactions: [reward, ...state.points.transactions].slice(0, 20),
           },
           unlockedBadgeIds: evaluateBadgeUnlocks({
@@ -200,6 +219,7 @@ export const useOceanStore = create<OceanStoreState>()(
         ];
 
         const nextTotal = state.points.total + reward.points;
+        const activityState = getUpdatedActivityState(state.points, reward.createdAt);
 
         return {
           seaGlassEntries: nextSeaGlassEntries,
@@ -217,8 +237,10 @@ export const useOceanStore = create<OceanStoreState>()(
           ],
           points: {
             total: nextTotal,
+            spent: state.points.spent,
             level: getLevelFromPoints(nextTotal),
-            streakDays: state.points.streakDays,
+            streakDays: activityState.streakDays,
+            lastActivityDate: activityState.lastActivityDate,
             transactions: [reward, ...state.points.transactions].slice(0, 20),
           },
           unlockedBadgeIds: evaluateBadgeUnlocks({
@@ -281,6 +303,7 @@ export const useOceanStore = create<OceanStoreState>()(
           0,
         );
         celebration = getTrashMilestoneCelebration(previousTrashPieceCount, trashPieceCount);
+        const activityState = getUpdatedActivityState(state.points, reward.createdAt);
 
         return {
           trashEntries: nextTrashEntries,
@@ -298,8 +321,10 @@ export const useOceanStore = create<OceanStoreState>()(
           ],
           points: {
             total: nextTotal,
+            spent: state.points.spent,
             level: getLevelFromPoints(nextTotal),
-            streakDays: state.points.streakDays,
+            streakDays: activityState.streakDays,
+            lastActivityDate: activityState.lastActivityDate,
             transactions: [reward, ...state.points.transactions].slice(0, 20),
           },
           unlockedBadgeIds: evaluateBadgeUnlocks({
@@ -313,6 +338,125 @@ export const useOceanStore = create<OceanStoreState>()(
 
       return celebration;
     },
+    claimQuest: (questId) => {
+      const state = get();
+      const questProgress = getQuestProgresses({
+        collection: state.collection,
+        trashEntries: state.trashEntries,
+        claimedQuestIds: state.claimedQuestIds,
+      }).find((entry) => entry.quest.id === questId);
+
+      if (!questProgress) {
+        return { ok: false, message: "That quest could not be found." };
+      }
+
+      if (questProgress.claimed) {
+        return { ok: false, message: "That quest reward is already claimed." };
+      }
+
+      if (questProgress.progress < questProgress.target) {
+        return { ok: false, message: "Keep exploring a little more before claiming this quest." };
+      }
+
+      const reward = createRewardTransaction({
+        action: "claim_quest",
+        detail: `${questProgress.quest.title} completed.`,
+        points: questProgress.quest.rewardPoints,
+      });
+
+      set((current) => {
+        const nextTotal = current.points.total + reward.points;
+        const trashPieceCount = current.trashEntries.reduce(
+          (total, entry) => total + entry.count,
+          0,
+        );
+        const activityState = getUpdatedActivityState(current.points, reward.createdAt);
+
+        return {
+          claimedQuestIds: [
+            ...current.claimedQuestIds,
+            `${questProgress.quest.id}:${questProgress.cycleKey}`,
+          ],
+          points: {
+            total: nextTotal,
+            spent: current.points.spent,
+            level: getLevelFromPoints(nextTotal),
+            streakDays: activityState.streakDays,
+            lastActivityDate: activityState.lastActivityDate,
+            transactions: [reward, ...current.points.transactions].slice(0, 20),
+          },
+          unlockedBadgeIds: evaluateBadgeUnlocks({
+            totalPoints: nextTotal,
+            collection: current.collection,
+            trashPieceCount,
+          }),
+        };
+      });
+
+      return {
+        ok: true,
+        message: `${questProgress.quest.rewardPoints} points splashed into your reward bucket.`,
+      };
+    },
+    purchaseShopItem: (itemId) => {
+      const state = get();
+      const item = treasureShopItems.find((entry) => entry.id === itemId);
+
+      if (!item) {
+        return { ok: false, message: "That treasure shop item is missing." };
+      }
+
+      if (state.purchasedShopItemIds.includes(item.id)) {
+        return { ok: false, message: "You already own this treasure." };
+      }
+
+      const availablePoints = getAvailablePoints(state.points);
+
+      if (availablePoints < item.cost) {
+        return {
+          ok: false,
+          message: `You need ${item.cost - availablePoints} more points to redeem this.`,
+        };
+      }
+
+      const purchase = createRewardTransaction({
+        action: "redeem_shop_item",
+        detail: `${item.title} joined your treasure chest.`,
+        points: -item.cost,
+      });
+
+      set((current) => ({
+        purchasedShopItemIds: [...current.purchasedShopItemIds, item.id],
+        equippedThemeId:
+          current.equippedThemeId || item.category !== "journalTheme"
+            ? current.equippedThemeId
+            : item.id,
+        points: {
+          ...current.points,
+          spent: current.points.spent + item.cost,
+          transactions: [purchase, ...current.points.transactions].slice(0, 20),
+        },
+      }));
+
+      return {
+        ok: true,
+        message: `${item.title} is now tucked into your treasure chest.`,
+      };
+    },
+    equipTheme: (itemId) =>
+      set((state) => {
+        const item = treasureShopItems.find((entry) => entry.id === itemId);
+
+        if (!item || item.category !== "journalTheme") {
+          return state;
+        }
+
+        if (!state.purchasedShopItemIds.includes(itemId)) {
+          return state;
+        }
+
+        return { equippedThemeId: itemId };
+      }),
     toggleFavorite: (itemId) =>
       set((state) => ({
         collection: state.collection.map((item) =>

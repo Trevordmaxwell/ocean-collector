@@ -141,6 +141,16 @@ const baseRewardLabels: Record<
     points: 10,
     detail: "You compared an item manually and saved the best match.",
   },
+  claim_quest: {
+    label: "Quest claimed",
+    points: 0,
+    detail: "A quest reward splashed into your point balance.",
+  },
+  redeem_shop_item: {
+    label: "Treasure shop",
+    points: 0,
+    detail: "You traded points for a cute collector reward.",
+  },
 };
 
 export function createRewardTransaction(input: {
