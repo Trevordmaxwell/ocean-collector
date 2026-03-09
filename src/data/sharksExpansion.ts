@@ -1,4 +1,5 @@
 import type { SharkSpecies } from "../types/models";
+import { sharkSpecimenMedia } from "./specimenMedia";
 
 export const sharkSpeciesExpansion: SharkSpecies[] = [
   {
@@ -8,6 +9,7 @@ export const sharkSpeciesExpansion: SharkSpecies[] = [
     commonName: "Megalodon Tooth",
     scientificName: "Otodus megalodon",
     specimenEmoji: "🦴",
+    ...sharkSpecimenMedia.megalodon,
     cardPalette: ["#C9D5E3", "#F7FAFD"],
     summary:
       "A huge triangular fossil tooth with chunky serrations and instant wow-factor.",
@@ -63,6 +65,7 @@ export const sharkSpeciesExpansion: SharkSpecies[] = [
     commonName: "Spinner Shark Tooth",
     scientificName: "Carcharhinus brevipinna",
     specimenEmoji: "🌀",
+    ...sharkSpecimenMedia.spinnerShark,
     cardPalette: ["#CDE8F7", "#F4FBFF"],
     summary:
       "A slim neat tooth that sits close to blacktip-style teeth but usually feels even finer.",
@@ -118,6 +121,7 @@ export const sharkSpeciesExpansion: SharkSpecies[] = [
     commonName: "Dusky Shark Tooth",
     scientificName: "Carcharhinus obscurus",
     specimenEmoji: "🌫️",
+    ...sharkSpecimenMedia.duskyShark,
     cardPalette: ["#D6DEE7", "#F8FBFD"],
     summary:
       "A broad but fairly elegant serrated tooth that lives in the carcharhinid comparison zone.",
@@ -173,6 +177,7 @@ export const sharkSpeciesExpansion: SharkSpecies[] = [
     commonName: "Bonnethead Tooth",
     scientificName: "Sphyrna tiburo",
     specimenEmoji: "🎩",
+    ...sharkSpecimenMedia.bonnethead,
     cardPalette: ["#D7ECF6", "#F7FCFE"],
     summary:
       "A small hammerhead-family tooth that often feels slanted and delicate rather than fierce.",
@@ -228,6 +233,7 @@ export const sharkSpeciesExpansion: SharkSpecies[] = [
     commonName: "Thresher Shark Tooth",
     scientificName: "Alopias vulpinus",
     specimenEmoji: "🪶",
+    ...sharkSpecimenMedia.thresherShark,
     cardPalette: ["#D1E7F7", "#F4FBFF"],
     summary:
       "A slim smooth-edged tooth with a subtle curve and a very fish-catching vibe.",
@@ -283,6 +289,7 @@ export const sharkSpeciesExpansion: SharkSpecies[] = [
     commonName: "Snaggletooth Shark Tooth",
     scientificName: "Hemipristis serra",
     specimenEmoji: "🪚",
+    ...sharkSpecimenMedia.snaggletoothShark,
     cardPalette: ["#DDE5EF", "#FFF7EC"],
     summary:
       "A wildly shaped fossil tooth with a slashing edge and one of the most dramatic silhouettes around.",
@@ -338,6 +345,7 @@ export const sharkSpeciesExpansion: SharkSpecies[] = [
     commonName: "Sandbar Shark Tooth",
     scientificName: "Carcharhinus plumbeus",
     specimenEmoji: "🏖️",
+    ...sharkSpecimenMedia.sandbarShark,
     cardPalette: ["#D9E5ED", "#F8FCFE"],
     summary:
       "A sturdy coastal tooth with a broad crown and a clean, collector-friendly shape.",

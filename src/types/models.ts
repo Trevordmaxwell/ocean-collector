@@ -191,7 +191,7 @@ export interface ShopItem {
 
 export interface MilestoneCelebration {
   id: string;
-  kind: "trash";
+  kind: "trash" | "quest";
   title: string;
   description: string;
   threshold: number;

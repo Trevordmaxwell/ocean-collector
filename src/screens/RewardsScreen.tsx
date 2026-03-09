@@ -94,7 +94,10 @@ export function RewardsScreen() {
               disabled={!canClaim}
               onPress={() => {
                 const result = claimQuest(entry.quest.id);
-                Alert.alert(result.ok ? "Quest claimed!" : "Not yet", result.message);
+
+                if (!result.ok) {
+                  Alert.alert("Not yet", result.message);
+                }
               }}
               style={[
                 styles.secondaryButton,
@@ -110,6 +113,11 @@ export function RewardsScreen() {
                 {entry.claimed ? "Claimed" : canClaim ? "Claim reward" : "Still in progress"}
               </Text>
             </Pressable>
+            {entry.claimed ? (
+              <Text style={styles.claimedQuestNote}>
+                Claimed with a splash. Your points are already tucked into the total above.
+              </Text>
+            ) : null}
           </OceanCard>
         );
       })}
@@ -275,6 +283,13 @@ const styles = StyleSheet.create({
     fontFamily: typography.bodyBold,
     fontSize: 14,
     color: palette.kelp,
+  },
+  claimedQuestNote: {
+    fontFamily: typography.body,
+    fontSize: 13,
+    lineHeight: 19,
+    color: palette.deep,
+    textAlign: "center",
   },
   secondaryButton: {
     alignItems: "center",

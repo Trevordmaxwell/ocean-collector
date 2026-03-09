@@ -1,4 +1,5 @@
 import type { ShellSpecies } from "../types/models";
+import { shellSpecimenMedia } from "./specimenMedia";
 
 export const shellSpeciesExpansion: ShellSpecies[] = [
   {
@@ -8,6 +9,7 @@ export const shellSpeciesExpansion: ShellSpecies[] = [
     scientificName: "Scaphella junonia",
     shellType: "spiral",
     specimenEmoji: "👑",
+    ...shellSpecimenMedia.junonia,
     cardPalette: ["#F8DBBE", "#FFF6EB"],
     summary:
       "A famously prized spiral shell with creamy coloring and tidy chocolate spots.",
@@ -52,6 +54,7 @@ export const shellSpeciesExpansion: ShellSpecies[] = [
     scientificName: "Busycon carica",
     shellType: "whelk",
     specimenEmoji: "🌀",
+    ...shellSpecimenMedia.knobbedWhelk,
     cardPalette: ["#EBC5A5", "#FFF2E6"],
     summary:
       "A chunky spiral whelk with shoulder knobs that give it a dramatic sculpted look.",
@@ -96,6 +99,7 @@ export const shellSpeciesExpansion: ShellSpecies[] = [
     scientificName: "Triplofusus giganteus",
     shellType: "conch",
     specimenEmoji: "🐎",
+    ...shellSpecimenMedia.horseConch,
     cardPalette: ["#F7C5AE", "#FFF0E8"],
     summary:
       "A giant Florida favorite with a long spiral body and a peachy-orange opening.",
@@ -140,6 +144,7 @@ export const shellSpeciesExpansion: ShellSpecies[] = [
     scientificName: "Fasciolaria lilium",
     shellType: "spiral",
     specimenEmoji: "🌷",
+    ...shellSpecimenMedia.bandedTulip,
     cardPalette: ["#F7D8C0", "#FFF8EE"],
     summary:
       "A graceful tulip-shaped shell with warm bands and a polished beach-boutique feel.",
@@ -184,6 +189,7 @@ export const shellSpeciesExpansion: ShellSpecies[] = [
     scientificName: "Anomia simplex",
     shellType: "clam",
     specimenEmoji: "🪙",
+    ...shellSpecimenMedia.jingleShell,
     cardPalette: ["#FBE7B7", "#FFF9E8"],
     summary:
       "A paper-thin, golden shell that can look almost translucent in the sun.",
@@ -228,6 +234,7 @@ export const shellSpeciesExpansion: ShellSpecies[] = [
     scientificName: "Plicatula gibbosa",
     shellType: "scallop",
     specimenEmoji: "🐾",
+    ...shellSpecimenMedia.kittensPaw,
     cardPalette: ["#F7C7D6", "#FFF4F8"],
     summary:
       "A tiny scallop-like shell with a sweet rounded shape and rosy coloring.",
@@ -272,6 +279,7 @@ export const shellSpeciesExpansion: ShellSpecies[] = [
     scientificName: "Atrina rigida",
     shellType: "clam",
     specimenEmoji: "🖋️",
+    ...shellSpecimenMedia.penShell,
     cardPalette: ["#D2C8BC", "#F9F2EA"],
     summary:
       "A long pointed bivalve shell that can feel like a giant quill from the sea.",
@@ -316,6 +324,7 @@ export const shellSpeciesExpansion: ShellSpecies[] = [
     scientificName: "Urosalpinx cinerea",
     shellType: "whelk",
     specimenEmoji: "🪛",
+    ...shellSpecimenMedia.oysterDrill,
     cardPalette: ["#E3D4C7", "#FBF5EE"],
     summary:
       "A small rugged shell with ridges and a strong little spire, often found around oyster habitat.",

@@ -139,6 +139,16 @@ export function CelebrationOverlay() {
     return null;
   }
 
+  const mascot = celebration.kind === "quest" ? "🐬" : "🦈";
+  const bannerLabel =
+    celebration.kind === "quest" ? "Treasure claimed!" : "Splash milestone!";
+  const rewardChipStyle =
+    celebration.kind === "quest" ? styles.questRewardChip : styles.rewardChip;
+  const rewardChipLabelStyle =
+    celebration.kind === "quest"
+      ? styles.questRewardChipLabel
+      : styles.rewardChipLabel;
+
   return (
     <Animated.View pointerEvents="box-none" style={[styles.root, { opacity: backdrop }]}>
       <Pressable style={styles.backdropTap} onPress={dismissCelebration} />
@@ -151,7 +161,7 @@ export function CelebrationOverlay() {
             },
           ]}
         >
-          <View style={styles.waveTop}>
+          <View style={[styles.waveTop, { backgroundColor: celebration.accent[0] }]}>
             <Animated.Text
               style={[
                 styles.shark,
@@ -164,7 +174,7 @@ export function CelebrationOverlay() {
                 },
               ]}
             >
-              🦈
+              {mascot}
             </Animated.Text>
             <Animated.View
               style={[
@@ -212,15 +222,15 @@ export function CelebrationOverlay() {
                 },
               ]}
             />
-            <Text style={styles.waveText}>Splash milestone!</Text>
+            <Text style={styles.waveText}>{bannerLabel}</Text>
           </View>
 
           <View style={styles.content}>
             <Text style={styles.title}>{celebration.title}</Text>
             <Text style={styles.description}>{celebration.description}</Text>
 
-            <View style={styles.rewardChip}>
-              <Text style={styles.rewardChipLabel}>{celebration.rewardLabel}</Text>
+            <View style={rewardChipStyle}>
+              <Text style={rewardChipLabelStyle}>{celebration.rewardLabel}</Text>
             </View>
 
             <Text style={styles.tapHint}>Tap anywhere to keep exploring</Text>
@@ -325,6 +335,20 @@ const styles = StyleSheet.create({
     fontFamily: typography.bodyBold,
     fontSize: 13,
     color: palette.kelp,
+  },
+  questRewardChip: {
+    marginTop: spacing.xs,
+    borderRadius: radius.pill,
+    backgroundColor: "#FFF4C8",
+    paddingVertical: spacing.xs,
+    paddingHorizontal: spacing.md,
+    borderWidth: 1,
+    borderColor: "rgba(255,255,255,0.88)",
+  },
+  questRewardChipLabel: {
+    fontFamily: typography.bodyBold,
+    fontSize: 13,
+    color: palette.deep,
   },
   tapHint: {
     fontFamily: typography.body,

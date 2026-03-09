@@ -205,6 +205,26 @@ export function getTrashMilestoneCelebration(
   };
 }
 
+export function createQuestCelebration(input: {
+  title: string;
+  rewardPoints: number;
+  cadence: "daily" | "weekly";
+  accent: [string, string];
+}) {
+  return {
+    id: createId("celebration"),
+    kind: "quest" as const,
+    title: `${input.title} complete!`,
+    description:
+      input.cadence === "daily"
+        ? "Daily quest claimed. Your beach journal just got a little brighter."
+        : "Weekly quest claimed. That is a big splash for your collector streak.",
+    threshold: input.rewardPoints,
+    rewardLabel: `+${input.rewardPoints} quest points`,
+    accent: input.accent,
+  };
+}
+
 export function getLevelFromPoints(total: number) {
   return Math.max(1, Math.floor(total / LEVEL_STEP) + 1);
 }

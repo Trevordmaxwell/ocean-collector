@@ -18,6 +18,19 @@ const localArtwork = (
   specimenImageCredit,
 });
 
+const wikimediaFile = (
+  filename: string,
+  specimenImageSourceUrl: string,
+  specimenImageCredit: string,
+) =>
+  wikimedia(
+    `https://commons.wikimedia.org/wiki/Special:FilePath/${encodeURIComponent(
+      filename,
+    ).replace(/%20/g, "_")}?width=1200`,
+    specimenImageSourceUrl,
+    specimenImageCredit,
+  );
+
 export const shellSpecimenMedia = {
   letteredOlive: wikimedia(
     "https://upload.wikimedia.org/wikipedia/commons/1/1c/Oliva_sayana_%28lettered_olive_snail_shell%29_%28Sanibel_Island%2C_Florida%2C_USA%29_%2849767621651%29.jpg",
@@ -67,6 +80,46 @@ export const shellSpecimenMedia = {
     "https://commons.wikimedia.org/wiki/File:Cyrtopleura_costata_(angelwing_clam_shell)_(Cayo_Costa_Island,_Florida,_USA)_5_(49774473898).jpg",
     "James St. John • CC BY 2.0",
   ),
+  junonia: wikimediaFile(
+    "Scaphella junonia.jpg",
+    "https://commons.wikimedia.org/wiki/File:Scaphella_junonia.jpg",
+    "Bradeos Graphon • Public domain",
+  ),
+  knobbedWhelk: wikimediaFile(
+    "Busycon carica eliceans 01.JPG",
+    "https://commons.wikimedia.org/wiki/File:Busycon_carica_eliceans_01.JPG",
+    "H. Zell • CC BY-SA 3.0",
+  ),
+  horseConch: wikimediaFile(
+    "Triplofusus giganteus 01.JPG",
+    "https://commons.wikimedia.org/wiki/File:Triplofusus_giganteus_01.JPG",
+    "H. Zell • CC BY-SA 3.0",
+  ),
+  bandedTulip: wikimediaFile(
+    "Fasciolaria lilium 01.JPG",
+    "https://commons.wikimedia.org/wiki/File:Fasciolaria_lilium_01.JPG",
+    "H. Zell • CC BY-SA 3.0",
+  ),
+  jingleShell: wikimediaFile(
+    "Anomia simplex (jingle shell) (Cayo Costa Island, Florida, USA) 5 (49775053461).jpg",
+    "https://commons.wikimedia.org/wiki/File:Anomia_simplex_(jingle_shell)_(Cayo_Costa_Island,_Florida,_USA)_5_(49775053461).jpg",
+    "James St. John • CC BY 2.0",
+  ),
+  kittensPaw: wikimediaFile(
+    "Plicatula gibbosa 01.JPG",
+    "https://commons.wikimedia.org/wiki/File:Plicatula_gibbosa_01.JPG",
+    "H. Zell • CC BY-SA 3.0",
+  ),
+  penShell: wikimediaFile(
+    "Atrina sp. (pen shell) on marine beach (Cayo Costa Island, Florida, USA) 3 (49775289657).jpg",
+    "https://commons.wikimedia.org/wiki/File:Atrina_sp._(pen_shell)_on_marine_beach_(Cayo_Costa_Island,_Florida,_USA)_3_(49775289657).jpg",
+    "James St. John • CC BY 2.0",
+  ),
+  oysterDrill: wikimediaFile(
+    "Urosalpinx cinerea 01.JPG",
+    "https://commons.wikimedia.org/wiki/File:Urosalpinx_cinerea_01.JPG",
+    "H. Zell • CC BY-SA 3.0",
+  ),
 } as const;
 
 export const sharkSpecimenMedia = {
@@ -108,6 +161,41 @@ export const sharkSpecimenMedia = {
   greatHammerhead: wikimedia(
     "https://upload.wikimedia.org/wikipedia/commons/9/92/Sphyrna_mokarran_lower_teeth.jpg",
     "https://commons.wikimedia.org/wiki/File:Sphyrna_mokarran_lower_teeth.jpg",
+    "D Ross Robertson • Public domain",
+  ),
+  megalodon: wikimediaFile(
+    "Megalodon shark tooth fossil.jpg",
+    "https://commons.wikimedia.org/wiki/File:Megalodon_shark_tooth_fossil.jpg",
+    "WorldwrestlingfederationVKM • CC BY-SA 3.0",
+  ),
+  spinnerShark: wikimediaFile(
+    "Carcharhinus brevipinna upper teeth.jpg",
+    "https://commons.wikimedia.org/wiki/File:Carcharhinus_brevipinna_upper_teeth.jpg",
+    "D Ross Robertson • Public domain",
+  ),
+  duskyShark: wikimediaFile(
+    "Carcharhinus obscurus lower teeth.jpg",
+    "https://commons.wikimedia.org/wiki/File:Carcharhinus_obscurus_lower_teeth.jpg",
+    "D Ross Robertson • Public domain",
+  ),
+  bonnethead: wikimediaFile(
+    "Sphyrna tiburo upper teeth.jpg",
+    "https://commons.wikimedia.org/wiki/File:Sphyrna_tiburo_upper_teeth.jpg",
+    "D Ross Robertson • Public domain",
+  ),
+  thresherShark: wikimediaFile(
+    "Alopias vulpinus teeth.jpg",
+    "https://commons.wikimedia.org/wiki/File:Alopias_vulpinus_teeth.jpg",
+    "D Ross Robertson • Public domain",
+  ),
+  snaggletoothShark: wikimediaFile(
+    "Hemipristis serra teeth.jpg",
+    "https://commons.wikimedia.org/wiki/File:Hemipristis_serra_teeth.jpg",
+    "Smithsonian • CC0",
+  ),
+  sandbarShark: wikimediaFile(
+    "Carcharhinus plumbeus lower teeth.jpg",
+    "https://commons.wikimedia.org/wiki/File:Carcharhinus_plumbeus_lower_teeth.jpg",
     "D Ross Robertson • Public domain",
   ),
 } as const;

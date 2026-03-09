@@ -13,6 +13,7 @@ import {
   getUpdatedActivityState,
 } from "../services/progression";
 import {
+  createQuestCelebration,
   createId,
   createRewardTransaction,
   evaluateBadgeUnlocks,
@@ -363,6 +364,12 @@ export const useOceanStore = create<OceanStoreState>()(
         detail: `${questProgress.quest.title} completed.`,
         points: questProgress.quest.rewardPoints,
       });
+      const celebration = createQuestCelebration({
+        title: questProgress.quest.title,
+        rewardPoints: questProgress.quest.rewardPoints,
+        cadence: questProgress.quest.cadence,
+        accent: questProgress.quest.accent,
+      });
 
       set((current) => {
         const nextTotal = current.points.total + reward.points;
@@ -390,6 +397,7 @@ export const useOceanStore = create<OceanStoreState>()(
             collection: current.collection,
             trashPieceCount,
           }),
+          pendingCelebration: celebration,
         };
       });
 
