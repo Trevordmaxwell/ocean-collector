@@ -33,9 +33,21 @@ function getConfidenceLabel(value: IdentificationSession["matches"][number]["con
   }
 }
 
+function buildCombinedLocation(beachName: string, placeOnBeach: string) {
+  const beach = beachName.trim();
+  const place = placeOnBeach.trim();
+
+  if (beach && place) {
+    return `${beach} • ${place}`;
+  }
+
+  return beach || place || "Beach adventure";
+}
+
 export function IdentifyScreen({ navigation, route }: RootScreenProps<"Identify">) {
   const { category } = route.params;
-  const [location, setLocation] = useState("");
+  const [beachName, setBeachName] = useState("");
+  const [placeOnBeach, setPlaceOnBeach] = useState("");
   const [notes, setNotes] = useState("");
   const [imageUri, setImageUri] = useState("");
   const [importText, setImportText] = useState("");
@@ -50,12 +62,13 @@ export function IdentifyScreen({ navigation, route }: RootScreenProps<"Identify"
     () =>
       buildAIAssistPayload({
         category,
-        location,
+        location: buildCombinedLocation(beachName, placeOnBeach),
         notes,
         hasPhoto: Boolean(imageUri),
       }),
-    [category, imageUri, location, notes],
+    [category, imageUri, beachName, notes, placeOnBeach],
   );
+  const location = buildCombinedLocation(beachName, placeOnBeach);
 
   async function pickImage() {
     const permission = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -152,13 +165,23 @@ export function IdentifyScreen({ navigation, route }: RootScreenProps<"Identify"
         accent={accent}
       >
         <View style={styles.formGroup}>
-          <Text style={styles.label}>Where did you find it?</Text>
+          <Text style={styles.label}>Beach name</Text>
           <TextInput
-            placeholder="Myrtle Beach, tide line, family walk..."
+            placeholder="Newport Beach"
             placeholderTextColor={palette.mist}
             style={styles.input}
-            value={location}
-            onChangeText={setLocation}
+            value={beachName}
+            onChangeText={setBeachName}
+          />
+        </View>
+        <View style={styles.formGroup}>
+          <Text style={styles.label}>Place on the beach</Text>
+          <TextInput
+            placeholder="Pier, tide pool, shell line..."
+            placeholderTextColor={palette.mist}
+            style={styles.input}
+            value={placeOnBeach}
+            onChangeText={setPlaceOnBeach}
           />
         </View>
         <View style={styles.formGroup}>

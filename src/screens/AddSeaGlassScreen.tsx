@@ -14,12 +14,24 @@ const sizes = ["tiny", "small", "medium", "large"] as const;
 const shapes = ["rounded", "jagged", "gem", "chunky"] as const;
 const surfaces = ["flat", "curved"] as const;
 
+function buildCombinedLocation(beachName: string, placeOnBeach: string) {
+  const beach = beachName.trim();
+  const place = placeOnBeach.trim();
+
+  if (beach && place) {
+    return `${beach} • ${place}`;
+  }
+
+  return beach || place || "Beach wander";
+}
+
 export function AddSeaGlassScreen({ navigation }: RootScreenProps<"AddSeaGlass">) {
   const [selectedPresetId, setSelectedPresetId] = useState(seaGlassPresets[0]!.id);
   const [size, setSize] = useState<(typeof sizes)[number]>("small");
   const [shape, setShape] = useState<(typeof shapes)[number]>("rounded");
   const [surface, setSurface] = useState<(typeof surfaces)[number]>("flat");
-  const [location, setLocation] = useState("");
+  const [beachName, setBeachName] = useState("");
+  const [placeOnBeach, setPlaceOnBeach] = useState("");
   const [note, setNote] = useState("");
   const addSeaGlassFind = useOceanStore((state) => state.addSeaGlassFind);
 
@@ -98,13 +110,21 @@ export function AddSeaGlassScreen({ navigation }: RootScreenProps<"AddSeaGlass">
           Flat pieces often come from bottle walls, while curved ones can feel like little rim or neck treasures.
         </Text>
 
-        <Text style={styles.label}>Where did you find it?</Text>
+        <Text style={styles.label}>Beach name</Text>
+        <TextInput
+          placeholder="Newport Beach"
+          placeholderTextColor={palette.mist}
+          style={styles.input}
+          value={beachName}
+          onChangeText={setBeachName}
+        />
+        <Text style={styles.label}>Place on the beach</Text>
         <TextInput
           placeholder="Jetty edge, tide pool, shell line..."
           placeholderTextColor={palette.mist}
           style={styles.input}
-          value={location}
-          onChangeText={setLocation}
+          value={placeOnBeach}
+          onChangeText={setPlaceOnBeach}
         />
 
         <Text style={styles.label}>Notes</Text>
@@ -126,7 +146,7 @@ export function AddSeaGlassScreen({ navigation }: RootScreenProps<"AddSeaGlass">
               size,
               shape,
               surface,
-              location: location || "Beach wander",
+              location: buildCombinedLocation(beachName, placeOnBeach),
               note,
             });
             Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success).catch(
