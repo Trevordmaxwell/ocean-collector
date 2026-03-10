@@ -1,6 +1,6 @@
 import * as Haptics from "expo-haptics";
 import { useState } from "react";
-import { Alert, Pressable, StyleSheet, Text, TextInput, View } from "react-native";
+import { Pressable, StyleSheet, Text, TextInput, View } from "react-native";
 
 import { Chip } from "../components/Chip";
 import { OceanCard } from "../components/OceanCard";
@@ -90,9 +90,6 @@ export function AddTrashScreen({ navigation }: RootScreenProps<"AddTrash">) {
             Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success).catch(
               () => undefined,
             );
-            if (!celebration) {
-              Alert.alert("Logged!", `${count} cleanup item${count > 1 ? "s" : ""} saved.`);
-            }
             navigation.goBack();
           }}
           style={styles.primaryButton}

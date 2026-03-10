@@ -6,7 +6,12 @@ import { SectionTitle } from "../components/SectionTitle";
 import { SpecimenPhoto } from "../components/SpecimenPhoto";
 import { useOceanStore } from "../store/useOceanStore";
 import { palette, radius, spacing, typography } from "../theme";
-import { formatFriendlyDate } from "../utils/format";
+import {
+  formatFriendlyDate,
+  formatIdentificationLabel,
+  formatRarityLabel,
+  getScientificLine,
+} from "../utils/format";
 import type { RootScreenProps } from "../navigation/types";
 
 export function CollectionItemScreen({
@@ -15,6 +20,9 @@ export function CollectionItemScreen({
 }: RootScreenProps<"CollectionItem">) {
   const collection = useOceanStore((state) => state.collection);
   const toggleFavorite = useOceanStore((state) => state.toggleFavorite);
+  const showScientificNames = useOceanStore(
+    (state) => state.preferences.showScientificNames,
+  );
   const item = collection.find((entry) => entry.id === route.params.itemId);
 
   if (!item) {
@@ -28,6 +36,8 @@ export function CollectionItemScreen({
     );
   }
 
+  const rarityLabel = formatRarityLabel(item.collectorRarity);
+
   return (
     <ScreenShell>
       <View style={styles.topSpacing} />
@@ -37,7 +47,10 @@ export function CollectionItemScreen({
 
       <OceanCard
         title={item.title}
-        subtitle={item.subtitle}
+        subtitle={
+          getScientificLine(showScientificNames, item.scientificName) ??
+          formatIdentificationLabel(item.identification)
+        }
         icon={item.specimenEmoji}
         imageSource={item.specimenImageSource}
         imageUri={item.specimenImageUri}
@@ -68,10 +81,19 @@ export function CollectionItemScreen({
             ) : null}
           </>
         ) : null}
-        <Text style={styles.detailLine}>Found: {formatFriendlyDate(item.foundDate)}</Text>
+
+        <Text style={styles.detailLine}>Saved: {formatFriendlyDate(item.foundDate)}</Text>
         <Text style={styles.detailLine}>Location: {item.location}</Text>
+        <Text style={styles.detailLine}>
+          Journal label: {formatIdentificationLabel(item.identification)}
+        </Text>
+        <Text style={styles.detailLine}>Trust note: {item.identification.note}</Text>
         <Text style={styles.detailLine}>Points earned: +{item.pointsAwarded}</Text>
-        <Text style={styles.detailLine}>Favorite: {item.favorite ? "Yes" : "Not yet"}</Text>
+        <Text style={styles.detailLine}>
+          Favorite star: {item.favorite ? "Pinned in your album" : "Not pinned yet"}
+        </Text>
+        {rarityLabel ? <Text style={styles.detailLine}>Collector vibe: {rarityLabel}</Text> : null}
+
         {item.referenceId && (item.category === "shell" || item.category === "sharkTooth") ? (
           <Pressable
             onPress={() =>
@@ -87,13 +109,15 @@ export function CollectionItemScreen({
         ) : null}
         <Pressable onPress={() => toggleFavorite(item.id)} style={styles.favoriteButton}>
           <Text style={styles.favoriteButtonLabel}>
-            {item.favorite ? "Remove favorite star" : "Mark as favorite"}
+            {item.favorite ? "Remove favorite star" : "Pin this memory"}
           </Text>
         </Pressable>
       </OceanCard>
 
-      <SectionTitle title="Notes" subtitle="A simple beach-journal entry." />
-      <OceanCard subtitle={item.notes || "No notes were saved for this find yet."} />
+      <SectionTitle title="Journal note" subtitle="A little memory from the beach walk." />
+      <OceanCard
+        subtitle={item.notes || "No note was saved yet. Add more the next time you log a find."}
+      />
     </ScreenShell>
   );
 }

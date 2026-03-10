@@ -1,4 +1,5 @@
 import type { ShellSpecies } from "../types/models";
+import { enrichShellSpecies } from "./libraryEnrichment";
 import { shellSpecimenMedia } from "./specimenMedia";
 import { shellSpeciesExpansion } from "./shellsExpansion";
 
@@ -454,4 +455,7 @@ const coreShellSpecies: ShellSpecies[] = [
   },
 ];
 
-export const shellSpecies: ShellSpecies[] = [...coreShellSpecies, ...shellSpeciesExpansion];
+export const shellSpecies: ShellSpecies[] = enrichShellSpecies([
+  ...coreShellSpecies,
+  ...shellSpeciesExpansion,
+]);

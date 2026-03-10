@@ -1,6 +1,6 @@
 import * as Haptics from "expo-haptics";
 import { useState } from "react";
-import { Alert, Pressable, StyleSheet, Text, TextInput, View } from "react-native";
+import { Pressable, StyleSheet, Text, TextInput, View } from "react-native";
 
 import { Chip } from "../components/Chip";
 import { OceanCard } from "../components/OceanCard";
@@ -132,7 +132,6 @@ export function AddSeaGlassScreen({ navigation }: RootScreenProps<"AddSeaGlass">
             Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success).catch(
               () => undefined,
             );
-            Alert.alert("Added!", `${preset.colorName} sea glass joined your collection.`);
             navigation.goBack();
           }}
           style={styles.primaryButton}

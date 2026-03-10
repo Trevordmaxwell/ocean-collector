@@ -9,6 +9,7 @@ import { SectionTitle } from "../components/SectionTitle";
 import { getLibraryItems } from "../data/library";
 import { useOceanStore } from "../store/useOceanStore";
 import { palette, radius, spacing, typography } from "../theme";
+import { getScientificLine } from "../utils/format";
 import type { LibraryCategory } from "../types/models";
 import type { RootScreenProps } from "../navigation/types";
 
@@ -24,7 +25,9 @@ function getFilterOptions(category: LibraryCategory) {
 
 export function LibraryScreen({ navigation, route }: RootScreenProps<"Library">) {
   const { category, initialQuery } = route.params;
-  const saveIdentifiedFind = useOceanStore((state) => state.saveIdentifiedFind);
+  const showScientificNames = useOceanStore(
+    (state) => state.preferences.showScientificNames,
+  );
   const [query, setQuery] = useState(initialQuery ?? "");
   const [activeFilter, setActiveFilter] = useState("All");
 
@@ -64,7 +67,7 @@ export function LibraryScreen({ navigation, route }: RootScreenProps<"Library">)
 
       <OceanCard
         title={category === "shell" ? "Shell Library" : "Shark Tooth Library"}
-        subtitle="Compare shapes, colors, textures, and lookalikes without needing the camera flow."
+        subtitle="Compare shapes, colors, textures, and lookalikes slowly. Save only when the guide card really feels right."
         icon={category === "shell" ? "📖" : "🗂️"}
       >
         <TextInput
@@ -89,42 +92,35 @@ export function LibraryScreen({ navigation, route }: RootScreenProps<"Library">)
 
       <SectionTitle
         title={`${items.length} guide cards`}
-        subtitle="Open a card for details, facts, and a save-to-collection shortcut."
+        subtitle="Open a guide card to review clues, collector notes, and stewardship tips before confirming a match."
       />
 
-      <View style={styles.list}>
-        {items.map((item) => (
-          <FindTile
-            key={item.id}
-            title={item.commonName}
-            subtitle={item.scientificName ?? item.summary}
-            emoji={item.specimenEmoji}
-            imageSource={item.specimenImageSource}
-            imageUri={item.specimenImageUri}
-            palettePair={item.cardPalette}
-            detail={item.summary}
-            trailingLabel={"shellType" in item ? item.shellType : item.toothProfile.serration}
-            onPress={() => navigation.navigate("ItemDetail", { category, id: item.id })}
-          />
-        ))}
-      </View>
-
-      {items.length > 0 ? (
-        <Pressable
-          onPress={() =>
-            saveIdentifiedFind({
-              category,
-              referenceId: items[0]!.id,
-              location: "Manual compare save",
-              notes: "Saved from the browsing library.",
-              source: "manual",
-            })
-          }
-          style={styles.footerButton}
-        >
-          <Text style={styles.footerButtonLabel}>Quick save first visible match</Text>
-        </Pressable>
-      ) : null}
+      {items.length === 0 ? (
+        <OceanCard
+          title="No guide cards match that search yet"
+          subtitle="Try a broader word like scallop, whelk, serrated, or smooth. Unknown is an okay outcome too."
+          icon="🧭"
+        />
+      ) : (
+        <View style={styles.list}>
+          {items.map((item) => (
+            <FindTile
+              key={item.id}
+              title={item.commonName}
+              subtitle={
+                getScientificLine(showScientificNames, item.scientificName) ?? item.summary
+              }
+              emoji={item.specimenEmoji}
+              imageSource={item.specimenImageSource}
+              imageUri={item.specimenImageUri}
+              palettePair={item.cardPalette}
+              detail={item.confusionNote}
+              trailingLabel={"shellType" in item ? item.shellType : item.toothProfile.serration}
+              onPress={() => navigation.navigate("ItemDetail", { category, id: item.id })}
+            />
+          ))}
+        </View>
+      )}
     </ScreenShell>
   );
 }
@@ -154,17 +150,5 @@ const styles = StyleSheet.create({
   },
   list: {
     gap: spacing.sm,
-  },
-  footerButton: {
-    alignItems: "center",
-    justifyContent: "center",
-    paddingVertical: spacing.md,
-    borderRadius: radius.pill,
-    backgroundColor: palette.deep,
-  },
-  footerButtonLabel: {
-    fontFamily: typography.headingSoft,
-    fontSize: 16,
-    color: palette.pearl,
   },
 });

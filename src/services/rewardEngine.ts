@@ -117,14 +117,24 @@ const baseRewardLabels: Record<
   { label: string; points: number; detail: string }
 > = {
   identify_shell: {
-    label: "Shell identified",
+    label: "Shell match saved",
     points: 16,
-    detail: "You matched a shell and tucked it into your journal.",
+    detail: "You saved a shell match to your journal.",
   },
   identify_shark_tooth: {
-    label: "Shark tooth identified",
+    label: "Tooth match saved",
     points: 18,
-    detail: "Sharp eye. You matched a shark tooth profile.",
+    detail: "You saved a shark tooth match to your journal.",
+  },
+  save_suggested_shell: {
+    label: "Suggested shell saved",
+    points: 8,
+    detail: "You tucked an AI-assisted shell suggestion into your journal.",
+  },
+  save_suggested_shark_tooth: {
+    label: "Suggested tooth saved",
+    points: 8,
+    detail: "You tucked an AI-assisted shark tooth suggestion into your journal.",
   },
   log_sea_glass: {
     label: "Sea glass logged",
@@ -137,9 +147,14 @@ const baseRewardLabels: Record<
     detail: "A beach stewardship win with instant impact.",
   },
   save_manual_guide: {
-    label: "Guide save",
-    points: 10,
-    detail: "You compared an item manually and saved the best match.",
+    label: "Guide-confirmed save",
+    points: 12,
+    detail: "You reviewed a guide card and saved a confirmed match.",
+  },
+  save_unknown_find: {
+    label: "Unknown find saved",
+    points: 6,
+    detail: "You saved a mystery find to revisit later.",
   },
   claim_quest: {
     label: "Quest claimed",

@@ -1,4 +1,5 @@
 import type { SharkSpecies } from "../types/models";
+import { enrichSharkSpecies } from "./libraryEnrichment";
 import { sharkSpecimenMedia } from "./specimenMedia";
 import { sharkSpeciesExpansion } from "./sharksExpansion";
 
@@ -453,4 +454,7 @@ const coreSharkSpecies: SharkSpecies[] = [
   },
 ];
 
-export const sharkSpecies: SharkSpecies[] = [...coreSharkSpecies, ...sharkSpeciesExpansion];
+export const sharkSpecies: SharkSpecies[] = enrichSharkSpecies([
+  ...coreSharkSpecies,
+  ...sharkSpeciesExpansion,
+]);

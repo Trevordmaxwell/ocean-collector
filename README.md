@@ -1,8 +1,16 @@
 # Ocean Collector
 
-Ocean Collector is a cute, ocean-themed mobile app for beachcombers who want to identify finds, save them into a digital collection, and earn rewards for both discovery and beach cleanup.
+Ocean Collector is a cozy ocean treasure journal for people who collect things at
+the beach. It helps users compare shells and shark teeth honestly, save finds
+into a personal scrapbook-like collection, log sea glass and cleanup moments,
+and learn a little while they explore.
 
-This first pass is built as a polished MVP foundation with a cozy, cartoon-collectible vibe inspired by Animal Crossing, soft beach palettes, and playful journal mechanics.
+The current direction is trust-first and local-first:
+
+- journal data persists on-device
+- saved finds are clearly separated from suggestions
+- AI is framed as optional outside help, not fake certainty
+- the UI aims for warm, collectible, beach-walk energy instead of a dry field guide
 
 ## Chosen Stack
 
@@ -10,7 +18,8 @@ This first pass is built as a polished MVP foundation with a cozy, cartoon-colle
 - React Navigation for scalable screen flow
 - Zustand + AsyncStorage for local-first persistent state
 - Expo Image Picker for photo selection
-- Local seed data and a placeholder identification service for future AI
+- Local seed data with enrichment layers for richer detail cards
+- AI-assist export/import scaffolding for honest external-model workflows
 
 Why this stack:
 
@@ -21,17 +30,17 @@ Why this stack:
 ## MVP Included
 
 - Splash / welcome experience
-- Beautiful home screen with main actions
-- Shell identification flow
-- Shark tooth identification flow
+- Journal-style home screen
+- Shell identification flow with honest AI-assist export
+- Shark tooth identification flow with honest AI-assist export
 - Manual shell and shark tooth libraries
-- Item detail / fact screens
+- Item detail / fact screens with richer collector notes and stewardship tips
 - Sea glass logging
 - Trash cleanup logging with stewardship rewards
-- My Collection journal
+- Persisted collection journal and scrapbook-style collection browsing
 - Points and badge framework
 - Local sample data for shells, shark teeth, sea glass, and trash categories
-- Placeholder AI identification pipeline with a future-ready service boundary
+- Manual export backup foundation
 
 ## Folder Structure
 
@@ -85,9 +94,11 @@ Local seed content for:
 
 ### `src/services`
 
-- `identification.ts`
-  - placeholder AI-style matching pipeline
-  - clean seam for future vision API or classifier integration
+- `aiAssist.ts`
+  - generates an AI-assist prompt and response template for an external LLM
+  - parses structured replies back into suggestion sessions
+- `dataPortability.ts`
+  - creates export snapshots of local journal data
 - `rewardEngine.ts`
   - point values
   - badge definitions
@@ -98,12 +109,27 @@ Local seed content for:
 
 `useOceanStore.ts` handles:
 
-- persisted collection journal
+- versioned persisted collection journal
 - sea glass entries
 - trash logs
 - reward transactions
 - badge unlock state
+- collector preferences
+- journal metadata such as last save and last export
 - welcome/onboarding state
+
+## Trust Model
+
+Ocean Collector now treats identification with more care. Collection entries can
+be saved as:
+
+- user-confirmed from the guide cards
+- AI-assisted suggestion
+- unknown / not sure
+- logged memory types like sea glass or cleanup
+
+This keeps the app useful without pretending it can confidently identify every
+photo on its own.
 
 ## Data Model Coverage
 
@@ -162,14 +188,17 @@ The repo is configured to serve GitHub Pages from `main /docs`, so publishing th
 - Shells and shark teeth are the primary experience.
 - Sea glass is treated as a lightweight collectible bonus loop.
 - Trash cleanup is rewarded heavily and framed positively.
-- The AI/photo flow is scaffolded now and designed to accept a real model later.
+- The AI/photo flow is scaffolded as an export/import assist flow rather than a fake built-in scanner.
 - The app uses local seed data first so the prototype feels real immediately.
 
 ## What To Build Next
 
 ### Highest value next steps
 
-- Replace placeholder identification with a real vision service or fine-tuned classifier
+- Add native import for exported journal snapshots
+- Add more original or licensed specimen art for top entries
+- Refine collection completion views and trip-log storytelling
+- Replace the external AI-assist handoff with a well-scoped real service only when the trust story is strong
 - Add licensed or original illustrated specimen art / photos per guide entry
 - Add richer compare tools like side-by-side overlays, silhouette comparison, and saved recent searches
 - Add account sync and cloud backup
@@ -187,6 +216,10 @@ The repo is configured to serve GitHub Pages from `main /docs`, so publishing th
 ## Verification
 
 - `npm run typecheck` passes
+
+## Release Prep
+
+- Store and privacy groundwork lives in [RELEASE_PREP.md](./RELEASE_PREP.md)
 
 ## Repo Status
 

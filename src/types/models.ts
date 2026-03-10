@@ -2,6 +2,7 @@ import type { ImageSourcePropType } from "react-native";
 
 export type LibraryCategory = "shell" | "sharkTooth";
 export type CollectionCategory = LibraryCategory | "seaGlass" | "trash";
+export type CollectorRarity = "everyday" | "special" | "dream";
 export type BadgeRuleKind =
   | "points"
   | "collection"
@@ -21,11 +22,50 @@ export type ShopCategory = "journalTheme" | "stickerPack" | "frame" | "wallpaper
 export type RewardAction =
   | "identify_shell"
   | "identify_shark_tooth"
+  | "save_suggested_shell"
+  | "save_suggested_shark_tooth"
   | "log_sea_glass"
   | "log_trash"
   | "save_manual_guide"
+  | "save_unknown_find"
   | "claim_quest"
   | "redeem_shop_item";
+export type IdentificationStatus = "confirmed" | "suggested" | "unknown" | "logged";
+export type IdentificationSource =
+  | "manual-guide"
+  | "manual-library"
+  | "experimental-ai"
+  | "unknown-journal"
+  | "sea-glass-log"
+  | "trash-log"
+  | "legacy-migration";
+export type SuggestionConfidenceBand = "promising" | "possible" | "stretch";
+
+export interface CollectorPreferences {
+  collectorName: string;
+  favoriteBeach: string;
+  showScientificNames: boolean;
+}
+
+export interface JournalMeta {
+  lastSavedAt?: string;
+  lastExportedAt?: string;
+  storageVersion: number;
+}
+
+export interface AppNotice {
+  id: string;
+  title: string;
+  message: string;
+  tone: "success" | "info" | "error";
+}
+
+export interface CollectionIdentification {
+  status: IdentificationStatus;
+  source: IdentificationSource;
+  label: string;
+  note: string;
+}
 
 export interface FactCard {
   id: string;
@@ -53,6 +93,10 @@ export interface BaseLibraryItem {
   specimenImageUri?: string;
   specimenImageSourceUrl?: string;
   specimenImageCredit?: string;
+  collectorRarity?: CollectorRarity;
+  collectorNote?: string;
+  confusionNote?: string;
+  stewardshipTip?: string;
   cardPalette: [string, string];
   factCards: FactCard[];
 }
@@ -214,6 +258,7 @@ export interface UserCollectionItem {
   referenceId?: string;
   title: string;
   subtitle: string;
+  scientificName?: string;
   foundDate: string;
   location: string;
   notes: string;
@@ -225,24 +270,56 @@ export interface UserCollectionItem {
   specimenImageUri?: string;
   specimenImageSourceUrl?: string;
   specimenImageCredit?: string;
+  collectorRarity?: CollectorRarity;
+  identification: CollectionIdentification;
   cardPalette: [string, string];
 }
 
 export interface IdentificationMatch {
   id: string;
-  confidence: number;
+  confidenceBand: SuggestionConfidenceBand;
   reason: string;
   category: LibraryCategory;
+  traitsNoticed: string[];
 }
 
 export interface IdentificationSession {
   category: LibraryCategory;
   imageUri: string;
-  provider: "placeholder-ai";
+  provider: "experimental-ai-export";
+  status: "matches" | "inconclusive";
+  summary: string;
+  disclaimer: string;
+  observedTraits: string[];
   matches: IdentificationMatch[];
+  rawResponse: string;
 }
 
-export interface OceanStoreState {
+export interface AIAssistCatalogEntry {
+  id: string;
+  commonName: string;
+  scientificName?: string;
+  summary: string;
+  identifyingFeatures: string[];
+  lookalikes: string[];
+}
+
+export interface AIAssistExportPayload {
+  category: LibraryCategory;
+  location: string;
+  notes: string;
+  hasPhoto: boolean;
+  prompt: string;
+  responseTemplate: string;
+  catalog: AIAssistCatalogEntry[];
+}
+
+export interface UserDataExport {
+  version: number;
+  exportedAt: string;
+  appVersion: string;
+  preferences: CollectorPreferences;
+  journalMeta: JournalMeta;
   hasSeenWelcome: boolean;
   collection: UserCollectionItem[];
   seaGlassEntries: SeaGlassEntry[];
@@ -253,15 +330,41 @@ export interface OceanStoreState {
   claimedQuestIds: string[];
   purchasedShopItemIds: string[];
   equippedThemeId?: string;
+}
+
+export interface OceanStoreState {
+  hasSeenWelcome: boolean;
+  hasHydrated: boolean;
+  preferences: CollectorPreferences;
+  journalMeta: JournalMeta;
+  collection: UserCollectionItem[];
+  seaGlassEntries: SeaGlassEntry[];
+  trashEntries: TrashEntry[];
+  findLogs: FindLog[];
+  points: UserPoints;
+  unlockedBadgeIds: string[];
+  claimedQuestIds: string[];
+  purchasedShopItemIds: string[];
+  equippedThemeId?: string;
   pendingCelebration: MilestoneCelebration | null;
+  pendingNotice: AppNotice | null;
+  setHasHydrated: (value: boolean) => void;
   markWelcomeSeen: () => void;
-  saveIdentifiedFind: (input: {
+  updatePreferences: (input: Partial<CollectorPreferences>) => void;
+  markDataExported: (exportedAt?: string) => void;
+  saveLibraryMatch: (input: {
     category: LibraryCategory;
     referenceId: string;
     location: string;
     notes: string;
     userPhotoUri?: string;
-    source: "ai" | "manual";
+    identification: CollectionIdentification;
+  }) => void;
+  saveUnknownFind: (input: {
+    category: LibraryCategory;
+    location: string;
+    notes: string;
+    userPhotoUri?: string;
   }) => void;
   addSeaGlassFind: (input: Omit<SeaGlassEntry, "id" | "foundDate">) => void;
   addTrashPickup: (
@@ -271,5 +374,7 @@ export interface OceanStoreState {
   purchaseShopItem: (itemId: string) => { ok: boolean; message: string };
   equipTheme: (itemId: string) => void;
   toggleFavorite: (itemId: string) => void;
+  showNotice: (input: Omit<AppNotice, "id">) => void;
+  dismissNotice: () => void;
   dismissCelebration: () => void;
 }

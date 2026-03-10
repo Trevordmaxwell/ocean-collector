@@ -19,11 +19,14 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 
 import { CelebrationOverlay } from "./src/components/CelebrationOverlay";
+import { NoticeBanner } from "./src/components/NoticeBanner";
 import { AppNavigator } from "./src/navigation/AppNavigator";
+import { useOceanStore } from "./src/store/useOceanStore";
 
 SplashScreen.preventAutoHideAsync().catch(() => undefined);
 
 export default function App() {
+  const hasHydrated = useOceanStore((state) => state.hasHydrated);
   const [brandFontsLoaded, brandFontError] = useFredokaFonts({
     Fredoka_600SemiBold,
     Fredoka_700Bold,
@@ -35,7 +38,7 @@ export default function App() {
   });
 
   const ready =
-    (brandFontsLoaded && bodyFontsLoaded) ||
+    (brandFontsLoaded && bodyFontsLoaded && hasHydrated) ||
     Boolean(brandFontError) ||
     Boolean(bodyFontError);
 
@@ -56,6 +59,7 @@ export default function App() {
         <View style={{ flex: 1 }}>
           <AppNavigator />
           <CelebrationOverlay />
+          <NoticeBanner />
         </View>
       </SafeAreaProvider>
     </GestureHandlerRootView>

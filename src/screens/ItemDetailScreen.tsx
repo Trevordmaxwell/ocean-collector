@@ -1,4 +1,4 @@
-import { Alert, Linking, Pressable, StyleSheet, Text, View } from "react-native";
+import { Linking, Pressable, StyleSheet, Text, View } from "react-native";
 
 import { Chip } from "../components/Chip";
 import { FindTile } from "../components/FindTile";
@@ -9,21 +9,33 @@ import { SpecimenPhoto } from "../components/SpecimenPhoto";
 import { getLibraryItem, getLibraryItems } from "../data/library";
 import { useOceanStore } from "../store/useOceanStore";
 import { gradients, palette, radius, spacing, typography } from "../theme";
+import { formatRarityLabel, getScientificLine } from "../utils/format";
 import type { RootScreenProps } from "../navigation/types";
 
-function matchesLookalike(currentLookalikes: string[], currentName: string, candidateName: string) {
+function matchesLookalike(
+  currentLookalikes: string[],
+  currentName: string,
+  candidateName: string,
+) {
   const candidate = candidateName.toLowerCase();
   const current = currentName.toLowerCase();
 
   return currentLookalikes.some((lookalike) => {
     const normalized = lookalike.toLowerCase();
-    return candidate.includes(normalized) || normalized.includes(candidate) || normalized.includes(current);
+    return (
+      candidate.includes(normalized) ||
+      normalized.includes(candidate) ||
+      normalized.includes(current)
+    );
   });
 }
 
 export function ItemDetailScreen({ navigation, route }: RootScreenProps<"ItemDetail">) {
   const item = getLibraryItem(route.params.category, route.params.id);
-  const saveIdentifiedFind = useOceanStore((state) => state.saveIdentifiedFind);
+  const showScientificNames = useOceanStore(
+    (state) => state.preferences.showScientificNames,
+  );
+  const saveLibraryMatch = useOceanStore((state) => state.saveLibraryMatch);
 
   if (!item) {
     return (
@@ -37,15 +49,21 @@ export function ItemDetailScreen({ navigation, route }: RootScreenProps<"ItemDet
   }
 
   const saveLabel =
-    route.params.category === "shell" ? "Save shell to collection" : "Save tooth to collection";
+    route.params.category === "shell"
+      ? "Confirm and save shell"
+      : "Confirm and save tooth";
   const comparisonQuery = item.lookalikes[0] ?? item.commonName;
+  const scientificLine =
+    getScientificLine(showScientificNames, item.scientificName) ?? item.summary;
+  const rarityLabel = formatRarityLabel(item.collectorRarity);
   const similarItems = getLibraryItems(route.params.category)
     .filter((candidate) => {
       if (candidate.id === item.id) {
         return false;
       }
 
-      const candidateName = "sharkName" in candidate ? candidate.sharkName : candidate.commonName;
+      const candidateName =
+        "sharkName" in candidate ? candidate.sharkName : candidate.commonName;
       const sameFamily =
         "shellType" in item && "shellType" in candidate
           ? item.shellType === candidate.shellType
@@ -71,7 +89,7 @@ export function ItemDetailScreen({ navigation, route }: RootScreenProps<"ItemDet
 
       <OceanCard
         title={item.commonName}
-        subtitle={item.scientificName ?? item.summary}
+        subtitle={scientificLine}
         icon={item.specimenEmoji}
         imageSource={item.specimenImageSource}
         imageUri={item.specimenImageUri}
@@ -103,18 +121,25 @@ export function ItemDetailScreen({ navigation, route }: RootScreenProps<"ItemDet
           {item.colors.map((color) => (
             <Chip key={color} label={color} />
           ))}
+          {rarityLabel ? <Chip label={rarityLabel} /> : null}
         </View>
         <View style={styles.buttonRow}>
           <Pressable
             onPress={() => {
-              saveIdentifiedFind({
+              saveLibraryMatch({
                 category: route.params.category,
                 referenceId: item.id,
-                location: "Library save",
-                notes: "Saved from the detailed guide card.",
-                source: "manual",
+                location: "Guide card review",
+                notes: "Saved after reviewing the full guide card.",
+                identification: {
+                  status: "confirmed",
+                  source: "manual-guide",
+                  label: "Collector-confirmed guide match",
+                  note:
+                    "Saved after reviewing the guide card and deciding the match felt right.",
+                },
               });
-              Alert.alert("Saved!", `${item.commonName} was added to your collection.`);
+              navigation.navigate("MainTabs", { screen: "Collection" });
             }}
             style={[styles.primaryButton, styles.flexButton]}
           >
@@ -129,12 +154,30 @@ export function ItemDetailScreen({ navigation, route }: RootScreenProps<"ItemDet
             }
             style={[styles.secondaryButton, styles.flexButton]}
           >
-            <Text style={styles.secondaryButtonLabel}>Compare in Library</Text>
+            <Text style={styles.secondaryButtonLabel}>Compare more</Text>
           </Pressable>
         </View>
       </OceanCard>
 
-      <SectionTitle title="How to spot it" subtitle="Quick collector clues" />
+      <SectionTitle
+        title="Collector notebook"
+        subtitle="A little more journal-like than a plain data card."
+      />
+      <OceanCard accent={route.params.category === "shell" ? gradients.shell : gradients.tooth}>
+        <Text style={styles.detailLine}>
+          Collector note:{" "}
+          {item.collectorNote ??
+            "Take a slow look at the big shapes before falling in love with tiny details."}
+        </Text>
+        <Text style={styles.detailLine}>
+          Confusion note:{" "}
+          {item.confusionNote ??
+            "Use the lookalikes list and compare the overall silhouette before naming it."}
+        </Text>
+        <Text style={styles.detailLine}>Lookalikes: {item.lookalikes.join(", ")}</Text>
+      </OceanCard>
+
+      <SectionTitle title="How to spot it" subtitle="The clues worth checking first." />
       <OceanCard>
         {item.identifyingFeatures.map((feature) => (
           <Text key={feature} style={styles.bullet}>
@@ -143,7 +186,10 @@ export function ItemDetailScreen({ navigation, route }: RootScreenProps<"ItemDet
         ))}
       </OceanCard>
 
-      <SectionTitle title="Shape & size" subtitle="Use these details when comparing." />
+      <SectionTitle
+        title="Shape, size, and where it belongs"
+        subtitle="Use these details when comparing carefully."
+      />
       <OceanCard>
         <Text style={styles.detailLine}>Shape notes: {item.shapeNotes.join(", ")}</Text>
         <Text style={styles.detailLine}>Size range: {item.sizeRange}</Text>
@@ -162,15 +208,26 @@ export function ItemDetailScreen({ navigation, route }: RootScreenProps<"ItemDet
         )}
       </OceanCard>
 
-      <SectionTitle title="Lookalikes & fun facts" subtitle="Friendly extra context" />
-      <OceanCard accent={route.params.category === "shell" ? gradients.shell : gradients.tooth}>
-        <Text style={styles.detailLine}>Lookalikes: {item.lookalikes.join(", ")}</Text>
-        {item.funFacts.map((fact) => (
-          <Text key={fact} style={styles.bullet}>
-            • {fact}
-          </Text>
-        ))}
-      </OceanCard>
+      <SectionTitle
+        title="Beach kindness note"
+        subtitle="The journal should help you learn without taking too much."
+      />
+      <OceanCard
+        title="Respectful collecting"
+        subtitle={
+          item.stewardshipTip ??
+          "If it is alive, freshly occupied, or protected where you are collecting, let it stay part of the beach."
+        }
+        icon="🌿"
+      />
+
+      <SectionTitle
+        title="Fun facts"
+        subtitle="Real value, still light and friendly."
+      />
+      {item.funFacts.map((fact) => (
+        <OceanCard key={fact} subtitle={fact} icon="✨" />
+      ))}
 
       <SectionTitle
         title="Compare similar finds"
@@ -186,7 +243,7 @@ export function ItemDetailScreen({ navigation, route }: RootScreenProps<"ItemDet
       {similarItems.length === 0 ? (
         <OceanCard
           title="No close lookalikes loaded yet"
-          subtitle="This guide card already has a compare shelf button if you want to search manually."
+          subtitle="The compare shelf button above is still handy if you want to search manually."
         />
       ) : (
         <View style={styles.similarList}>
@@ -194,13 +251,23 @@ export function ItemDetailScreen({ navigation, route }: RootScreenProps<"ItemDet
             <FindTile
               key={similarItem.id}
               title={similarItem.commonName}
-              subtitle={similarItem.scientificName ?? similarItem.summary}
+              subtitle={
+                getScientificLine(showScientificNames, similarItem.scientificName) ??
+                similarItem.summary
+              }
               emoji={similarItem.specimenEmoji}
               imageSource={similarItem.specimenImageSource}
               imageUri={similarItem.specimenImageUri}
               palettePair={similarItem.cardPalette}
-              detail={similarItem.summary}
-              trailingLabel={"shellType" in similarItem ? similarItem.shellType : similarItem.toothProfile.serration}
+              detail={
+                similarItem.confusionNote ??
+                "Compare the big shape first, then double-check the little clues."
+              }
+              trailingLabel={
+                "shellType" in similarItem
+                  ? similarItem.shellType
+                  : similarItem.toothProfile.serration
+              }
               onPress={() =>
                 navigation.push("ItemDetail", {
                   category: route.params.category,
@@ -264,6 +331,7 @@ const styles = StyleSheet.create({
     fontFamily: typography.headingSoft,
     color: palette.pearl,
     fontSize: 16,
+    textAlign: "center",
   },
   secondaryButton: {
     alignItems: "center",
@@ -278,6 +346,7 @@ const styles = StyleSheet.create({
     fontFamily: typography.bodyBold,
     color: palette.deep,
     fontSize: 15,
+    textAlign: "center",
   },
   bullet: {
     fontFamily: typography.body,

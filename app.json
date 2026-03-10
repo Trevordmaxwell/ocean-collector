@@ -2,6 +2,7 @@
   "expo": {
     "name": "Ocean Collector",
     "slug": "ocean-collector",
+    "description": "A cozy ocean treasure journal for shells, shark teeth, sea glass, cleanup moments, and gentle AI-assisted suggestions.",
     "scheme": "ocean-collector",
     "version": "0.1.0",
     "orientation": "portrait",
@@ -13,9 +14,11 @@
       "backgroundColor": "#fdf5e4"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.trevormaxwell.oceancollector"
     },
     "android": {
+      "package": "com.trevormaxwell.oceancollector",
       "adaptiveIcon": {
         "backgroundColor": "#d7f1ee",
         "foregroundImage": "./assets/android-icon-foreground.png",
@@ -31,7 +34,14 @@
       "baseUrl": "/ocean-collector"
     },
     "plugins": [
-      "expo-font"
+      "expo-font",
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "Ocean Collector uses your beach-find photos so you can save them in your journal and optionally prepare an AI-assisted suggestion.",
+          "cameraPermission": "Ocean Collector uses the camera so you can photograph shells, shark teeth, sea glass, and cleanup finds for your private journal."
+        }
+      ]
     ]
   }
 }
