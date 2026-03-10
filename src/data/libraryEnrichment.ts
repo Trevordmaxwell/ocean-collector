@@ -10,6 +10,13 @@ type SharkStoryFields = Pick<
 >;
 
 const shellOverrides: Record<string, Partial<EntryStoryFields>> = {
+  "lettered-olive": {
+    collectorRarity: "special",
+    collectorNote:
+      "A glossy whole olive always feels polished and display-ready, even before you clean off the sand.",
+    confusionNote:
+      "Lettered olives stay smoother and shinier than augers or other long spiral shells, so trust the overall silky shape first.",
+  },
   junonia: {
     collectorRarity: "dream",
     collectorNote:
@@ -24,22 +31,45 @@ const shellOverrides: Record<string, Partial<EntryStoryFields>> = {
   },
   "calico-scallop": {
     collectorRarity: "special",
+    collectorNote:
+      "Calico scallops make great scrapbook stars because the color patches feel painterly even when the shell is worn.",
+    stewardshipTip:
+      "Fresh paired scallops can still be living bivalves, so favor empty beach shells and skip collecting anything clearly occupied.",
   },
   "lightning-whelk": {
     collectorRarity: "special",
     confusionNote:
       "Check the opening direction first. Lightning whelks are the famous left-hand spirals, unlike knobbed whelks.",
   },
+  "moon-snail": {
+    collectorRarity: "special",
+    confusionNote:
+      "Moon snails and shark eyes can feel very close, so compare the roundness and opening details before you label it too quickly.",
+  },
+  "coquina-clam": {
+    collectorRarity: "special",
+    collectorNote:
+      "A handful of colorful coquinas can feel like collecting tiny pastel confetti from the surf line.",
+    stewardshipTip:
+      "Live coquinas are usually right in the active wash, so leave the busy little burrowers alone and collect only empty shells.",
+  },
   "scotch-bonnet": {
     collectorRarity: "dream",
     collectorNote:
       "A pretty, patterned scotch bonnet can feel like a true shell-table showpiece.",
+  },
+  "florida-fighting-conch": {
+    collectorRarity: "special",
+    confusionNote:
+      "Check the flared opening and overall heft before mixing it up with tulips or other warm-toned spiral shells.",
   },
   "kittens-paw": {
     collectorRarity: "special",
   },
   "jingle-shell": {
     collectorRarity: "special",
+    collectorNote:
+      "Jingle shells feel magical because they are so thin and glowing compared with sturdier beach shells.",
   },
 };
 
@@ -51,9 +81,20 @@ const sharkOverrides: Record<string, Partial<SharkStoryFields>> = {
   },
   "great-white": {
     collectorRarity: "dream",
+    collectorNote:
+      "Even smaller great white teeth feel dramatic because the broad triangle is so instantly recognizable in a tray.",
+    confusionNote:
+      "Bull, tiger, and great white teeth can all feel bold, so compare notch shape, width, and how even the serrations look.",
   },
   "sand-tiger": {
     collectorRarity: "special",
+    collectorNote:
+      "Sand tiger teeth are collector favorites because the side cusplets give them that classic fossil-tooth silhouette.",
+  },
+  "tiger-shark": {
+    collectorRarity: "dream",
+    confusionNote:
+      "Tiger teeth usually look more notched and dramatic than bull or lemon shark teeth, so let that deep hooked feel guide you.",
   },
   "snaggletooth-shark": {
     collectorRarity: "dream",
@@ -65,6 +106,8 @@ const sharkOverrides: Record<string, Partial<SharkStoryFields>> = {
   },
   "great-hammerhead": {
     collectorRarity: "special",
+    collectorNote:
+      "Hammerhead teeth feel fun to compare because they often look broad and tidy without the deep theatrical notch of a tiger tooth.",
   },
 };
 

@@ -11,6 +11,7 @@ import {
   getEquippedTheme,
   getQuestProgresses,
 } from "../services/progression";
+import { getBeachTripSummaries } from "../services/journalStories";
 import { rewardBadges } from "../services/rewardEngine";
 import { useOceanStore } from "../store/useOceanStore";
 import { gradients, palette, radius, spacing, typography } from "../theme";
@@ -18,6 +19,7 @@ import {
   formatFriendlyDate,
   formatFriendlyTime,
   formatIdentificationLabel,
+  formatRarityLabel,
   getScientificLine,
   isToday,
 } from "../utils/format";
@@ -122,6 +124,8 @@ export function HomeScreen({ navigation }: TabScreenProps<"Home">) {
   const latestCollectionItem = collection[0];
   const todayFindCount = findLogs.filter((entry) => isToday(entry.occurredAt)).length;
   const recentMemories = collection.slice(0, 3);
+  const pinnedMemories = collection.filter((item) => item.favorite).slice(0, 2);
+  const recentTrips = getBeachTripSummaries(collection).slice(0, 2);
   const questProgresses = getQuestProgresses({
     collection,
     trashEntries,
@@ -256,6 +260,46 @@ export function HomeScreen({ navigation }: TabScreenProps<"Home">) {
       )}
 
       <SectionTitle
+        title="Pinned keepsakes"
+        subtitle="The finds that already feel worthy of their own little sticker spot."
+      />
+      {pinnedMemories.length === 0 ? (
+        <OceanCard
+          title="Nothing pinned just yet"
+          subtitle="Star a favorite find in your journal and it will start building a cozy little shelf here."
+          icon="⭐"
+          accent={gradients.reward}
+        />
+      ) : (
+        <View style={styles.secondaryList}>
+          {pinnedMemories.map((item) => (
+            <FindTile
+              key={item.id}
+              title={item.title}
+              subtitle={
+                getScientificLine(preferences.showScientificNames, item.scientificName) ??
+                formatIdentificationLabel(item.identification)
+              }
+              emoji={item.specimenEmoji}
+              imageSource={item.specimenImageSource}
+              imageUri={item.specimenImageUri}
+              palettePair={item.cardPalette}
+              detail={`${item.location} • ${
+                item.notes || "Pinned because it felt extra worth remembering."
+              }`}
+              trailingLabel={formatRarityLabel(item.collectorRarity) ?? "Pinned"}
+              onPress={() =>
+                navigation.navigate("CollectionItem", {
+                  itemId: item.id,
+                  category: item.category,
+                })
+              }
+            />
+          ))}
+        </View>
+      )}
+
+      <SectionTitle
         title="Beach walk actions"
         subtitle="Quick taps with a little more personality."
       />
@@ -292,6 +336,47 @@ export function HomeScreen({ navigation }: TabScreenProps<"Home">) {
           <Text style={styles.promptLine}>{journalPrompt}</Text>
         </OceanCard>
       ) : null}
+
+      <SectionTitle
+        title="Recent beach walks"
+        subtitle="Little scrapbook pages grouped by where and when the walk happened."
+      />
+      {recentTrips.length === 0 ? (
+        <OceanCard
+          title="No beach walks logged yet"
+          subtitle="Once you save a few finds from the same place, this starts to feel like a real trip journal."
+          icon="🗺️"
+        />
+      ) : (
+        recentTrips.map((trip) => (
+          <OceanCard
+            key={trip.id}
+            title={trip.location}
+            subtitle={`${formatFriendlyDate(trip.foundDate)} • ${trip.items.length} saved memories`}
+            icon={trip.favoriteCount > 0 ? "📍" : "🪸"}
+            accent={trip.categoryCounts.trash > 0 ? gradients.cleanup : gradients.ocean}
+          >
+            <Text style={styles.tripStats}>
+              {trip.categoryCounts.shell} shells • {trip.categoryCounts.sharkTooth} teeth •{" "}
+              {trip.categoryCounts.seaGlass} glass • {trip.categoryCounts.trash} cleanup
+            </Text>
+            <Text style={styles.tripHighlights}>
+              Highlights: {trip.highlightTitles.join(" • ")}
+            </Text>
+            <Pressable
+              onPress={() =>
+                navigation.navigate("CollectionItem", {
+                  itemId: trip.items[0]!.id,
+                  category: trip.items[0]!.category,
+                })
+              }
+              style={styles.tripButton}
+            >
+              <Text style={styles.tripButtonLabel}>Open this beach page</Text>
+            </Pressable>
+          </OceanCard>
+        ))
+      )}
 
       <SectionTitle
         title="Guide shelves and cozy extras"
@@ -457,6 +542,31 @@ const styles = StyleSheet.create({
     color: palette.kelp,
     fontSize: 14,
     lineHeight: 20,
+  },
+  tripStats: {
+    fontFamily: typography.bodyBold,
+    color: palette.deep,
+    fontSize: 14,
+  },
+  tripHighlights: {
+    fontFamily: typography.body,
+    color: palette.deep,
+    fontSize: 14,
+    lineHeight: 20,
+  },
+  tripButton: {
+    alignSelf: "flex-start",
+    borderRadius: radius.pill,
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.xs + 2,
+    backgroundColor: "rgba(255,255,255,0.82)",
+    borderWidth: 1,
+    borderColor: palette.border,
+  },
+  tripButtonLabel: {
+    fontFamily: typography.bodyBold,
+    fontSize: 14,
+    color: palette.deep,
   },
   secondaryList: {
     gap: spacing.sm,

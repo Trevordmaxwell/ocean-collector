@@ -6,29 +6,12 @@ import { OceanCard } from "../components/OceanCard";
 import { ScreenShell } from "../components/ScreenShell";
 import { SectionTitle } from "../components/SectionTitle";
 import { SpecimenPhoto } from "../components/SpecimenPhoto";
-import { getLibraryItem, getLibraryItems } from "../data/library";
+import { getLibraryItem } from "../data/library";
+import { getComparableLibraryItems } from "../services/libraryCompare";
 import { useOceanStore } from "../store/useOceanStore";
 import { gradients, palette, radius, spacing, typography } from "../theme";
 import { formatRarityLabel, getScientificLine } from "../utils/format";
 import type { RootScreenProps } from "../navigation/types";
-
-function matchesLookalike(
-  currentLookalikes: string[],
-  currentName: string,
-  candidateName: string,
-) {
-  const candidate = candidateName.toLowerCase();
-  const current = currentName.toLowerCase();
-
-  return currentLookalikes.some((lookalike) => {
-    const normalized = lookalike.toLowerCase();
-    return (
-      candidate.includes(normalized) ||
-      normalized.includes(candidate) ||
-      normalized.includes(current)
-    );
-  });
-}
 
 export function ItemDetailScreen({ navigation, route }: RootScreenProps<"ItemDetail">) {
   const item = getLibraryItem(route.params.category, route.params.id);
@@ -56,29 +39,18 @@ export function ItemDetailScreen({ navigation, route }: RootScreenProps<"ItemDet
   const scientificLine =
     getScientificLine(showScientificNames, item.scientificName) ?? item.summary;
   const rarityLabel = formatRarityLabel(item.collectorRarity);
-  const similarItems = getLibraryItems(route.params.category)
-    .filter((candidate) => {
-      if (candidate.id === item.id) {
-        return false;
-      }
+  const similarItems = getComparableLibraryItems(route.params.category, item.id);
 
-      const candidateName =
-        "sharkName" in candidate ? candidate.sharkName : candidate.commonName;
-      const sameFamily =
-        "shellType" in item && "shellType" in candidate
-          ? item.shellType === candidate.shellType
-          : "toothProfile" in item && "toothProfile" in candidate
-            ? item.toothProfile.serration === candidate.toothProfile.serration
-            : false;
+  function returnToGuideShelf() {
+    if (navigation.canGoBack()) {
+      navigation.goBack();
+      return;
+    }
 
-      return (
-        matchesLookalike(item.lookalikes, item.commonName, candidate.commonName) ||
-        matchesLookalike(candidate.lookalikes, candidate.commonName, item.commonName) ||
-        matchesLookalike(item.lookalikes, item.commonName, candidateName) ||
-        sameFamily
-      );
-    })
-    .slice(0, 3);
+    navigation.navigate("Library", {
+      category: route.params.category,
+    });
+  }
 
   return (
     <ScreenShell>
@@ -155,6 +127,20 @@ export function ItemDetailScreen({ navigation, route }: RootScreenProps<"ItemDet
             style={[styles.secondaryButton, styles.flexButton]}
           >
             <Text style={styles.secondaryButtonLabel}>Compare more</Text>
+          </Pressable>
+        </View>
+        <View style={styles.buttonRow}>
+          <Pressable
+            onPress={returnToGuideShelf}
+            style={[styles.secondaryButton, styles.flexButton]}
+          >
+            <Text style={styles.secondaryButtonLabel}>Back to guide shelf</Text>
+          </Pressable>
+          <Pressable
+            onPress={() => navigation.navigate("MainTabs", { screen: "Home" })}
+            style={[styles.secondaryButton, styles.flexButton]}
+          >
+            <Text style={styles.secondaryButtonLabel}>Home</Text>
           </Pressable>
         </View>
       </OceanCard>

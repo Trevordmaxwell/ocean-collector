@@ -18,6 +18,7 @@ prototype into release bureaucracy too early.
 - iOS bundle identifier: `com.trevormaxwell.oceancollector`
 - Android package: `com.trevormaxwell.oceancollector`
 - Image-picker permission copy is configured in `app.json`
+- Android explicitly blocks `android.permission.RECORD_AUDIO` so store/privacy review stays aligned with the current feature set
 
 ## Current Permissions
 
@@ -44,6 +45,22 @@ prototype into release bureaucracy too early.
 - Finalize app icon, splash, screenshots, and store listing copy.
 - Add a real backup or sync story before calling the app production-ready.
 - Do a focused accessibility pass for dynamic type, contrast, and touch targets.
+
+## Local QA Notes (March 10, 2026)
+
+- `npm run typecheck` passes after the backup-restore and journal updates.
+- Real browser verification was run against the local Expo web build for:
+  - home journal load
+  - saving an unknown shell into the collection
+  - beach-walk scrapbook grouping
+  - collection item return-to-album flow
+  - guide detail compare flow and return-to-library flow
+  - settings restore/import section visibility
+- On this Mac, native simulator/device QA is currently blocked by missing tooling:
+  - `xcodebuild` is unavailable because full Xcode is not the active developer directory
+  - `xcrun simctl` is unavailable
+  - `adb` is not installed
+- Next honest native QA step is a real iPhone/Android pass once Xcode + simulator support and Android platform tools are installed.
 
 ## Honest AI-Assist Checklist
 

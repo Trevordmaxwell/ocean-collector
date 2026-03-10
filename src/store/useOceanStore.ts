@@ -34,6 +34,7 @@ import type {
   JournalMeta,
   LibraryCategory,
   OceanStoreState,
+  UserDataExport,
   UserCollectionItem,
   UserPoints,
 } from "../types/models";
@@ -239,6 +240,45 @@ function migratePersistedState(persistedState: unknown) {
   };
 }
 
+function buildRestoredState(input: UserDataExport) {
+  return {
+    hasSeenWelcome: Boolean(input.hasSeenWelcome),
+    preferences: {
+      ...defaultPreferences,
+      ...input.preferences,
+    },
+    journalMeta: {
+      ...defaultJournalMeta,
+      ...input.journalMeta,
+      storageVersion: STORAGE_VERSION,
+      lastRestoredAt: new Date().toISOString(),
+    },
+    collection: Array.isArray(input.collection)
+      ? input.collection.map((item) => migrateCollectionItem(item))
+      : [],
+    seaGlassEntries: Array.isArray(input.seaGlassEntries) ? input.seaGlassEntries : [],
+    trashEntries: Array.isArray(input.trashEntries) ? input.trashEntries : [],
+    findLogs: Array.isArray(input.findLogs) ? input.findLogs : [],
+    unlockedBadgeIds: Array.isArray(input.unlockedBadgeIds) ? input.unlockedBadgeIds : [],
+    claimedQuestIds: Array.isArray(input.claimedQuestIds) ? input.claimedQuestIds : [],
+    purchasedShopItemIds: Array.isArray(input.purchasedShopItemIds)
+      ? input.purchasedShopItemIds
+      : [],
+    equippedThemeId:
+      typeof input.equippedThemeId === "string" ? input.equippedThemeId : undefined,
+    points:
+      input.points && typeof input.points.total === "number"
+        ? {
+            ...createDefaultPoints(),
+            ...input.points,
+            transactions: Array.isArray(input.points.transactions)
+              ? input.points.transactions
+              : [],
+          }
+        : createDefaultPoints(),
+  };
+}
+
 function getRewardActionForLibrarySave(
   category: LibraryCategory,
   identification: CollectionIdentification,
@@ -327,6 +367,25 @@ export const useOceanStore = create<OceanStoreState>()(
             "success",
           ),
         })),
+      restoreImportedData: (input) => {
+        const restored = buildRestoredState(input);
+
+        set((state) => ({
+          ...restored,
+          hasHydrated: state.hasHydrated,
+          pendingCelebration: null,
+          pendingNotice: createNotice(
+            "Journal restored",
+            `${restored.collection.length} saved memories were restored onto this device.`,
+            "success",
+          ),
+        }));
+
+        return {
+          ok: true,
+          message: `${restored.collection.length} saved memories were restored onto this device.`,
+        };
+      },
       saveLibraryMatch: ({
         category,
         referenceId,

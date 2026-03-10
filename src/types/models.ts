@@ -50,6 +50,7 @@ export interface CollectorPreferences {
 export interface JournalMeta {
   lastSavedAt?: string;
   lastExportedAt?: string;
+  lastRestoredAt?: string;
   storageVersion: number;
 }
 
@@ -332,6 +333,18 @@ export interface UserDataExport {
   equippedThemeId?: string;
 }
 
+export interface UserDataExportSummary {
+  collectorName: string;
+  exportedAt: string;
+  collectionCount: number;
+  favoritesCount: number;
+  trashCount: number;
+  seaGlassCount: number;
+  tripCount: number;
+  totalPoints: number;
+  badgeCount: number;
+}
+
 export interface OceanStoreState {
   hasSeenWelcome: boolean;
   hasHydrated: boolean;
@@ -352,6 +365,7 @@ export interface OceanStoreState {
   markWelcomeSeen: () => void;
   updatePreferences: (input: Partial<CollectorPreferences>) => void;
   markDataExported: (exportedAt?: string) => void;
+  restoreImportedData: (input: UserDataExport) => { ok: boolean; message: string };
   saveLibraryMatch: (input: {
     category: LibraryCategory;
     referenceId: string;

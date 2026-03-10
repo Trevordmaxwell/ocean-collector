@@ -1,9 +1,12 @@
 import { Linking, Pressable, StyleSheet, Text, View } from "react-native";
 
+import { FindTile } from "../components/FindTile";
 import { OceanCard } from "../components/OceanCard";
 import { ScreenShell } from "../components/ScreenShell";
 import { SectionTitle } from "../components/SectionTitle";
 import { SpecimenPhoto } from "../components/SpecimenPhoto";
+import { getComparableLibraryItems } from "../services/libraryCompare";
+import { getSameTripItems } from "../services/journalStories";
 import { useOceanStore } from "../store/useOceanStore";
 import { palette, radius, spacing, typography } from "../theme";
 import {
@@ -37,6 +40,20 @@ export function CollectionItemScreen({
   }
 
   const rarityLabel = formatRarityLabel(item.collectorRarity);
+  const sameTripItems = getSameTripItems(collection, item);
+  const compareCandidates =
+    item.referenceId && (item.category === "shell" || item.category === "sharkTooth")
+      ? getComparableLibraryItems(item.category, item.referenceId)
+      : [];
+
+  function returnToAlbum() {
+    if (navigation.canGoBack()) {
+      navigation.goBack();
+      return;
+    }
+
+    navigation.navigate("MainTabs", { screen: "Collection" });
+  }
 
   return (
     <ScreenShell>
@@ -112,12 +129,103 @@ export function CollectionItemScreen({
             {item.favorite ? "Remove favorite star" : "Pin this memory"}
           </Text>
         </Pressable>
+        <View style={styles.navigationRow}>
+          <Pressable
+            onPress={returnToAlbum}
+            style={[styles.navigationButton, styles.navigationButtonSoft]}
+          >
+            <Text style={styles.navigationButtonLabel}>Return to album</Text>
+          </Pressable>
+          <Pressable
+            onPress={() => navigation.navigate("MainTabs", { screen: "Home" })}
+            style={[styles.navigationButton, styles.navigationButtonSoft]}
+          >
+            <Text style={styles.navigationButtonLabel}>Home</Text>
+          </Pressable>
+        </View>
       </OceanCard>
 
       <SectionTitle title="Journal note" subtitle="A little memory from the beach walk." />
       <OceanCard
         subtitle={item.notes || "No note was saved yet. Add more the next time you log a find."}
       />
+
+      <SectionTitle
+        title="Same beach walk"
+        subtitle="Other little memories from the same day and place."
+      />
+      {sameTripItems.length === 0 ? (
+        <OceanCard
+          title="A solo page for now"
+          subtitle="Save a few finds from the same walk and this card will start feeling like a trip spread."
+          icon="🧺"
+        />
+      ) : (
+        <View style={styles.relatedList}>
+          {sameTripItems.map((tripItem) => (
+            <FindTile
+              key={tripItem.id}
+              title={tripItem.title}
+              subtitle={
+                getScientificLine(showScientificNames, tripItem.scientificName) ??
+                formatIdentificationLabel(tripItem.identification)
+              }
+              emoji={tripItem.specimenEmoji}
+              imageSource={tripItem.specimenImageSource}
+              imageUri={tripItem.specimenImageUri}
+              palettePair={tripItem.cardPalette}
+              detail={tripItem.notes || "Another tucked-away note from this walk."}
+              trailingLabel={`+${tripItem.pointsAwarded}`}
+              onPress={() =>
+                navigation.push("CollectionItem", {
+                  itemId: tripItem.id,
+                  category: tripItem.category,
+                })
+              }
+            />
+          ))}
+        </View>
+      )}
+
+      {compareCandidates.length > 0 ? (
+        <>
+          <SectionTitle
+            title="Compare guide neighbors"
+            subtitle="Nearby shell or tooth matches, just in case you want a second look."
+          />
+          <View style={styles.relatedList}>
+            {compareCandidates.map((candidate) => (
+              <FindTile
+                key={candidate.id}
+                title={candidate.commonName}
+                subtitle={
+                  getScientificLine(showScientificNames, candidate.scientificName) ??
+                  candidate.summary
+                }
+                emoji={candidate.specimenEmoji}
+                imageSource={candidate.specimenImageSource}
+                imageUri={candidate.specimenImageUri}
+                palettePair={candidate.cardPalette}
+                detail={
+                  candidate.confusionNote ??
+                  "Compare the big silhouette first, then the smaller clues."
+                }
+                trailingLabel={
+                  "shellType" in candidate
+                    ? candidate.shellType
+                    : candidate.toothProfile.serration
+                }
+                onPress={() =>
+                  navigation.push("ItemDetail", {
+                    category: item.category === "shell" ? "shell" : "sharkTooth",
+                    id: candidate.id,
+                  })
+                }
+              />
+            ))}
+          </View>
+        </>
+      ) : null}
     </ScreenShell>
   );
 }
@@ -168,5 +276,29 @@ const styles = StyleSheet.create({
     fontFamily: typography.headingSoft,
     fontSize: 16,
     color: palette.pearl,
+  },
+  relatedList: {
+    gap: spacing.sm,
+  },
+  navigationRow: {
+    flexDirection: "row",
+    gap: spacing.sm,
+  },
+  navigationButton: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: radius.pill,
+    paddingVertical: spacing.sm + 2,
+    borderWidth: 1,
+    borderColor: palette.border,
+  },
+  navigationButtonSoft: {
+    backgroundColor: "rgba(255,255,255,0.78)",
+  },
+  navigationButtonLabel: {
+    fontFamily: typography.bodyBold,
+    fontSize: 15,
+    color: palette.deep,
   },
 });

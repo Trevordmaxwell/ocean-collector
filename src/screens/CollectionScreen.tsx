@@ -8,6 +8,7 @@ import { ScreenShell } from "../components/ScreenShell";
 import { SectionTitle } from "../components/SectionTitle";
 import { StatPill } from "../components/StatPill";
 import { sharkSpecies, shellSpecies } from "../data";
+import { getBeachTripSummaries } from "../services/journalStories";
 import { useOceanStore } from "../store/useOceanStore";
 import { gradients, palette, spacing, typography } from "../theme";
 import {
@@ -75,6 +76,7 @@ export function CollectionScreen({ navigation }: TabScreenProps<"Collection">) {
       .map((item) => item.referenceId),
   ).size;
   const pinnedFavorites = collection.filter((item) => item.favorite).slice(0, 3);
+  const beachTrips = useMemo(() => getBeachTripSummaries(collection).slice(0, 3), [collection]);
 
   const filteredItems = useMemo(
     () =>
@@ -202,6 +204,46 @@ export function CollectionScreen({ navigation }: TabScreenProps<"Collection">) {
         </>
       ) : null}
 
+      {beachTrips.length > 0 && activeFilter === "all" ? (
+        <>
+          <SectionTitle
+            title="Beach walk scrapbook"
+            subtitle="Grouped little outing pages so your collection reads like days at the shore."
+          />
+          <View style={styles.tripList}>
+            {beachTrips.map((trip) => (
+              <OceanCard
+                key={trip.id}
+                title={trip.location}
+                subtitle={`${formatFriendlyDate(trip.foundDate)} • ${trip.items.length} memories`}
+                icon={trip.favoriteCount > 0 ? "📌" : "🏖️"}
+                accent={trip.categoryCounts.trash > 0 ? gradients.cleanup : gradients.ocean}
+              >
+                <Text style={styles.tripLine}>
+                  {trip.categoryCounts.shell} shells • {trip.categoryCounts.sharkTooth} teeth •{" "}
+                  {trip.categoryCounts.seaGlass} glass • {trip.categoryCounts.trash} cleanup
+                </Text>
+                <Text style={styles.tripLine}>Points from this walk: +{trip.totalPoints}</Text>
+                <Text style={styles.tripHighlights}>
+                  Saved highlights: {trip.highlightTitles.join(" • ")}
+                </Text>
+                <Text
+                  onPress={() =>
+                    navigation.navigate("CollectionItem", {
+                      itemId: trip.items[0]!.id,
+                      category: trip.items[0]!.category,
+                    })
+                  }
+                  style={styles.tripLink}
+                >
+                  Open latest memory from this walk
+                </Text>
+              </OceanCard>
+            ))}
+          </View>
+        </>
+      ) : null}
+
       <SectionTitle
         title="Memory lane"
         subtitle={
@@ -286,6 +328,25 @@ const styles = StyleSheet.create({
   },
   list: {
     gap: spacing.sm,
+  },
+  tripList: {
+    gap: spacing.sm,
+  },
+  tripLine: {
+    fontFamily: typography.bodyBold,
+    fontSize: 14,
+    color: palette.deep,
+  },
+  tripHighlights: {
+    fontFamily: typography.body,
+    fontSize: 14,
+    lineHeight: 20,
+    color: palette.deep,
+  },
+  tripLink: {
+    fontFamily: typography.bodyBold,
+    fontSize: 14,
+    color: palette.kelp,
   },
   groupWrap: {
     gap: spacing.sm,

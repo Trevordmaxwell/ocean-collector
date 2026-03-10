@@ -47,9 +47,9 @@ export const shellSpecimenMedia = {
     "James St. John • CC BY 2.0",
   ),
   moonSnail: wikimedia(
-    "https://upload.wikimedia.org/wikipedia/commons/thumb/d/dd/Neverita_duplicata_01.JPG/960px-Neverita_duplicata_01.JPG",
-    "https://commons.wikimedia.org/wiki/File:Neverita_duplicata_01.JPG",
-    "H. Zell • CC BY-SA 3.0",
+    "https://commons.wikimedia.org/wiki/Special:FilePath/Neverita_duplicata_(shark_eye_shell)_(Cayo_Costa_Island,_Florida,_USA)_3_(49775244202).jpg?width=1200",
+    "https://commons.wikimedia.org/wiki/File:Neverita_duplicata_(shark_eye_shell)_(Cayo_Costa_Island,_Florida,_USA)_3_(49775244202).jpg",
+    "James St. John • CC BY 2.0",
   ),
   coquinaClam: wikimedia(
     "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f6/Donax_variabilis_%28variable_coquina_clam_shells%29_%28Sanibel_Island%2C_Florida%2C_USA%29_%2849775052226%29.jpg/960px-Donax_variabilis_%28variable_coquina_clam_shells%29_%28Sanibel_Island%2C_Florida%2C_USA%29_%2849775052226%29.jpg",
@@ -71,9 +71,9 @@ export const shellSpecimenMedia = {
     "Joshyhmarks • CC BY-SA 3.0",
   ),
   floridaFightingConch: wikimedia(
-    "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fb/Strombus_alatus_01.JPG/960px-Strombus_alatus_01.JPG",
-    "https://commons.wikimedia.org/wiki/File:Strombus_alatus_01.JPG",
-    "H. Zell • CC BY-SA 3.0",
+    "https://commons.wikimedia.org/wiki/Special:FilePath/Strombus_alatus_(shell)_(Marco_Island,_Florida,_USA)_3_(52929878332).jpg?width=1200",
+    "https://commons.wikimedia.org/wiki/File:Strombus_alatus_(shell)_(Marco_Island,_Florida,_USA)_3_(52929878332).jpg",
+    "James St. John • CC BY 2.0",
   ),
   angelWing: wikimedia(
     "https://upload.wikimedia.org/wikipedia/commons/thumb/8/87/Cyrtopleura_costata_%28angelwing_clam_shell%29_%28Cayo_Costa_Island%2C_Florida%2C_USA%29_5_%2849774473898%29.jpg/960px-Cyrtopleura_costata_%28angelwing_clam_shell%29_%28Cayo_Costa_Island%2C_Florida%2C_USA%29_5_%2849774473898%29.jpg",
@@ -101,8 +101,8 @@ export const shellSpecimenMedia = {
     "H. Zell • CC BY-SA 3.0",
   ),
   jingleShell: wikimediaFile(
-    "Anomia simplex (jingle shell) (Cayo Costa Island, Florida, USA) 5 (49775053461).jpg",
-    "https://commons.wikimedia.org/wiki/File:Anomia_simplex_(jingle_shell)_(Cayo_Costa_Island,_Florida,_USA)_5_(49775053461).jpg",
+    "Anomia simplex (jingle shell) (Marco Island, Florida, USA) 5 (52930865722).jpg",
+    "https://commons.wikimedia.org/wiki/File:Anomia_simplex_(jingle_shell)_(Marco_Island,_Florida,_USA)_5_(52930865722).jpg",
     "James St. John • CC BY 2.0",
   ),
   kittensPaw: wikimediaFile(
@@ -129,9 +129,9 @@ export const sharkSpecimenMedia = {
     "Robert Purdy/Smithsonian National Museum of Natural History • Public domain",
   ),
   greatWhite: wikimedia(
-    "https://upload.wikimedia.org/wikipedia/commons/thumb/9/94/Carcharodon_carcharias_01.jpg/960px-Carcharodon_carcharias_01.jpg",
-    "https://commons.wikimedia.org/wiki/File:Carcharodon_carcharias_01.jpg",
-    "Kevmin • CC BY-SA 3.0",
+    "https://commons.wikimedia.org/wiki/Special:FilePath/White_shark_teeth_closeup_Florida.jpg?width=1200",
+    "https://commons.wikimedia.org/wiki/File:White_shark_teeth_closeup_Florida.jpg",
+    "Wikimedia Commons",
   ),
   lemonShark: wikimedia(
     "https://upload.wikimedia.org/wikipedia/commons/e/e0/Negaprion_brevirostris_lower_teeth.jpg",

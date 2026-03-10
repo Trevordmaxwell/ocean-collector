@@ -40,7 +40,7 @@ Why this stack:
 - Persisted collection journal and scrapbook-style collection browsing
 - Points and badge framework
 - Local sample data for shells, shark teeth, sea glass, and trash categories
-- Manual export backup foundation
+- Manual export and restore backup flow in Settings
 
 ## Folder Structure
 
@@ -99,6 +99,7 @@ Local seed content for:
   - parses structured replies back into suggestion sessions
 - `dataPortability.ts`
   - creates export snapshots of local journal data
+  - parses and previews restore snapshots before replacing local data
 - `rewardEngine.ts`
   - point values
   - badge definitions
@@ -116,6 +117,7 @@ Local seed content for:
 - badge unlock state
 - collector preferences
 - journal metadata such as last save and last export
+- restore metadata such as last import on the current device
 - welcome/onboarding state
 
 ## Trust Model
